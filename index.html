@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SIDMASTAFLEX — DJ · Producer · Event Curator</title>
+<meta name="description" content="Sidmastaflex — DJ, producer, event curator, and beatboxer from the Inland Empire. Heavy basslines, deep grooves, genre-bending sets across Southern California. Booking & press kit.">
+<meta property="og:title" content="SIDMASTAFLEX">
+<meta property="og:description" content="DJ · Producer · Event Curator · Beatboxer — Southern California. Heavy basslines, deep grooves. If you're not moving, check your pulse.">
+<meta property="og:image" content="https://sidmastaflex.com/assets/logo.png">
+<meta property="og:url" content="https://sidmastaflex.com">
+<link rel="canonical" href="https://sidmastaflex.com">
+<link rel="icon" href="assets/logo.png">
+<style>
+  :root {
+    --bg: #08080b;
+    --bg2: #0e0e14;
+    --ink: #eceaf4;
+    --dim: #9a95ad;
+    --line: rgba(236,234,244,.14);
+    --acc: #8b5cf6;
+    --acc2: #22d3ee;
+    font-size: 16px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg); color: var(--ink);
+    font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+    line-height: 1.6; overflow-x: hidden;
+  }
+  h1,h2,h3 { font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
+  a { color: var(--acc2); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  section { max-width: 1100px; margin: 0 auto; padding: 5.5rem 1.5rem 0; scroll-margin-top: 3.2rem; }
+  .kicker { color: var(--acc); font-size: .8rem; letter-spacing: .35em; text-transform: uppercase; margin-bottom: .8rem; }
+  h2 { font-size: clamp(1.6rem, 4vw, 2.4rem); margin-bottom: 1.6rem; }
+
+  /* ---------- hero ---------- */
+  header {
+    min-height: 100svh; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; text-align: center;
+    position: relative; padding: 2rem 1rem; isolation: isolate;
+  }
+  #geo { position: absolute; inset: 0; z-index: -1; opacity: .5; }
+  header::after {
+    content: ""; position: absolute; inset: 0; z-index: -1;
+    background: radial-gradient(ellipse at 50% 45%, transparent 20%, var(--bg) 78%);
+  }
+  .logo { width: min(340px, 62vw); filter: invert(1); mix-blend-mode: screen; }
+  .name {
+    font-size: clamp(2.2rem, 8vw, 5rem); letter-spacing: .18em; margin-top: -1rem;
+    text-shadow: 0 0 30px rgba(139,92,246,.55);
+  }
+  .glitch { position: relative; }
+  .glitch::before, .glitch::after {
+    content: attr(data-t); position: absolute; inset: 0; opacity: .8;
+    clip-path: inset(38% 0 40% 0);
+  }
+  .glitch::before { color: var(--acc);  transform: translate(-2px,-1px); animation: gl 3.1s infinite steps(1); }
+  .glitch::after  { color: var(--acc2); transform: translate(2px,1px);  animation: gl 2.3s .7s infinite steps(1); }
+  @keyframes gl {
+    0%,92% { clip-path: inset(100% 0 0 0); }
+    93% { clip-path: inset(12% 0 78% 0); }
+    95% { clip-path: inset(58% 0 22% 0); }
+    97% { clip-path: inset(30% 0 55% 0); }
+    100% { clip-path: inset(100% 0 0 0); }
+  }
+  .tag { color: var(--dim); letter-spacing: .3em; text-transform: uppercase; font-size: clamp(.7rem, 2vw, .95rem); margin-top: 1rem; }
+  .pulse { color: var(--acc); font-style: italic; margin-top: .6rem; font-size: .95rem; letter-spacing: .05em; }
+  .cta { display: flex; gap: 1rem; margin-top: 2.2rem; flex-wrap: wrap; justify-content: center; }
+  .btn {
+    padding: .85rem 1.9rem; border: 1px solid var(--acc); color: var(--ink);
+    letter-spacing: .2em; text-transform: uppercase; font-size: .8rem; font-weight: 700;
+    background: linear-gradient(120deg, rgba(139,92,246,.25), rgba(34,211,238,.12));
+    transition: all .25s;
+  }
+  .btn:hover { background: var(--acc); color: #0b0416; text-decoration: none; box-shadow: 0 0 28px rgba(139,92,246,.6); }
+  .btn.ghost { border-color: var(--line); background: transparent; }
+  .btn.ghost:hover { border-color: var(--acc2); background: rgba(34,211,238,.12); color: var(--ink); box-shadow: 0 0 20px rgba(34,211,238,.35); }
+  .hero-socials { display: flex; gap: 1.5rem; margin-top: 2rem; }
+  .hero-socials a { display: block; }
+  .hero-socials svg { width: 22px; height: 22px; fill: var(--dim); transition: fill .25s, transform .25s; }
+  .hero-socials a:hover svg { fill: var(--acc2); transform: translateY(-2px); }
+
+  nav {
+    position: sticky; top: 0; z-index: 50; display: flex; justify-content: center; gap: 1.7rem;
+    padding: .9rem 1rem; background: rgba(8,8,11,.82); backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line); font-size: .75rem; letter-spacing: .22em; text-transform: uppercase;
+    flex-wrap: wrap;
+  }
+  nav a { color: var(--dim); } nav a:hover { color: var(--ink); text-decoration: none; }
+
+  /* ---------- about ---------- */
+  .about-bg {
+    max-width: none; position: relative; isolation: isolate;
+    background: url("assets/about_bg.jpg") center 30% / cover no-repeat;
+    border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+    padding-bottom: 5.5rem; margin-bottom: -5.5rem;
+  }
+  .about-bg::before {
+    content: ""; position: absolute; inset: 0; z-index: -1;
+    background: linear-gradient(180deg, var(--bg) 0%, rgba(8,8,11,.55) 25%, rgba(8,8,11,.55) 75%, var(--bg) 100%);
+  }
+  .about-bg > * { max-width: 1100px; margin-left: auto; margin-right: auto; }
+  .about-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 2.5rem; align-items: start; }
+  .about-grid p { color: var(--dim); font-size: 1.05rem; }
+  .about-grid p b { color: var(--ink); }
+  .residencies { border: 1px solid var(--line); padding: 1.5rem; background: var(--bg2); }
+  .residencies h3 { font-size: .8rem; letter-spacing: .3em; color: var(--acc); margin-bottom: 1rem; }
+  .residencies li { list-style: none; padding: .55rem 0; border-bottom: 1px solid var(--line); color: var(--ink); font-weight: 600; }
+  .residencies li span { color: var(--dim); font-weight: 400; float: right; }
+  @media (max-width: 760px) { .about-grid { grid-template-columns: 1fr; } }
+
+  /* ---------- mixes ---------- */
+  #mixes { padding-top: 9.5rem; }
+  .sc-embed { border: 1px solid var(--line); background: var(--bg2); }
+  .tt-embed { border: 1px solid var(--line); background: var(--bg2); padding: 1rem; display: flex; justify-content: center; }
+  .platforms { display: flex; gap: 1.2rem; margin-top: 1.2rem; flex-wrap: wrap; }
+  .platforms a { color: var(--dim); font-size: .8rem; letter-spacing: .2em; text-transform: uppercase; border: 1px solid var(--line); padding: .5rem 1rem; }
+  .platforms a:hover { color: var(--ink); border-color: var(--acc); text-decoration: none; }
+
+  /* ---------- gallery ---------- */
+  .filters { display: flex; gap: .6rem; flex-wrap: wrap; margin-bottom: 1.4rem; }
+  .filters button {
+    background: transparent; border: 1px solid var(--line); color: var(--dim);
+    padding: .45rem 1rem; font-size: .72rem; letter-spacing: .18em; text-transform: uppercase; cursor: pointer;
+  }
+  .filters button.on { border-color: var(--acc); color: var(--ink); background: rgba(139,92,246,.15); }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: .6rem; }
+  .grid img {
+    width: 100%; aspect-ratio: 1; object-fit: cover; display: block; cursor: pointer;
+    filter: saturate(.92); transition: transform .25s, filter .25s; background: var(--bg2);
+  }
+  .grid img:hover { transform: scale(1.03); filter: saturate(1.1); }
+  #lightbox {
+    position: fixed; inset: 0; background: rgba(5,5,8,.95); display: none;
+    align-items: center; justify-content: center; z-index: 100; cursor: zoom-out;
+  }
+  #lightbox img { max-width: 94vw; max-height: 92vh; box-shadow: 0 0 60px rgba(139,92,246,.35); }
+
+  /* ---------- videos ---------- */
+  .vids { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: .8rem; }
+  .vids video { width: 100%; aspect-ratio: 9/16; object-fit: cover; background: var(--bg2); border: 1px solid var(--line); }
+  .vids .wide { grid-column: 1 / -1; }
+  .vids .wide video { aspect-ratio: 16/9; }
+
+  /* ---------- shows ---------- */
+  .shows li { list-style: none; display: flex; justify-content: space-between; gap: 1rem; padding: .8rem .2rem; border-bottom: 1px solid var(--line); }
+  .shows .venue { font-weight: 700; }
+  .shows .year { color: var(--acc); font-variant-numeric: tabular-nums; letter-spacing: .12em; }
+
+  /* ---------- flyer wall ---------- */
+  .flyers { columns: 4 220px; column-gap: .7rem; }
+  .flyers figure { margin: 0 0 .7rem; break-inside: avoid; position: relative; border: 1px solid var(--line); background: var(--bg2); }
+  .flyers img { width: 100%; display: block; cursor: pointer; transition: filter .25s; }
+  .flyers img:hover { filter: brightness(1.12); }
+  .flyers figcaption {
+    font-size: .68rem; letter-spacing: .12em; text-transform: uppercase; color: var(--dim);
+    padding: .45rem .6rem; border-top: 1px solid var(--line);
+  }
+
+  /* ---------- contact ---------- */
+  #contact { text-align: center; padding-bottom: 2rem; }
+  .email { font-size: clamp(1.1rem, 3.5vw, 1.7rem); font-weight: 800; letter-spacing: .05em; display: inline-block; margin: 1rem 0 2rem; }
+  .socials { display: flex; gap: 1.4rem; justify-content: center; flex-wrap: wrap; }
+  .socials a { color: var(--dim); letter-spacing: .22em; font-size: .8rem; text-transform: uppercase; }
+  .socials a:hover { color: var(--acc2); }
+  footer { text-align: center; color: var(--dim); font-size: .72rem; letter-spacing: .18em; padding: 3.5rem 1rem 2rem; text-transform: uppercase; }
+</style>
+</head>
+<body>
+
+<header>
+  <svg id="geo" viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid slice" aria-hidden="true"></svg>
+  <img class="logo" src="assets/logo.png" alt="Sidmastaflex sacred geometry logo">
+  <h1 class="name glitch" data-t="SIDMASTAFLEX">SIDMASTAFLEX</h1>
+  <div class="tag">DJ &nbsp;·&nbsp; Producer &nbsp;·&nbsp; Event Curator &nbsp;·&nbsp; Beatboxer</div>
+  <div class="pulse">If you're not moving, check your pulse.</div>
+  <div class="cta">
+    <a class="btn" href="#contact">Book Me</a>
+    <a class="btn ghost" href="assets/Sidmastaflex_EPK.pdf" download>Press Kit (PDF)</a>
+  </div>
+  <div class="hero-socials">
+    <a href="https://www.instagram.com/sidmastaflex_/" target="_blank" rel="noopener" aria-label="Instagram">
+      <svg viewBox="0 0 24 24"><path d="M12 2.2c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.41a3.72 3.72 0 0 1-1.38-.9 3.72 3.72 0 0 1-.9-1.38c-.16-.42-.36-1.06-.41-2.23C2.21 15.58 2.2 15.2 2.2 12s.01-3.58.07-4.85c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41C8.42 2.21 8.8 2.2 12 2.2m0 3.15A6.65 6.65 0 1 0 18.65 12 6.65 6.65 0 0 0 12 5.35m0 10.97A4.32 4.32 0 1 1 16.32 12 4.32 4.32 0 0 1 12 16.32m8.46-11.23a1.55 1.55 0 1 1-1.55-1.55 1.55 1.55 0 0 1 1.55 1.55"/></svg>
+    </a>
+    <a href="https://www.tiktok.com/@sidmastaflex" target="_blank" rel="noopener" aria-label="TikTok">
+      <svg viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.9 2.9 0 1 1-2.9-2.9c.28 0 .56.04.82.12V9.4a6.34 6.34 0 0 0-.82-.05 6.34 6.34 0 1 0 6.34 6.34V8.87a8.16 8.16 0 0 0 4.77 1.52v-3.45a4.85 4.85 0 0 1-.99-.25z"/></svg>
+    </a>
+    <a href="https://www.youtube.com/@sidmastaflexmusic" target="_blank" rel="noopener" aria-label="YouTube">
+      <svg viewBox="0 0 24 24"><path d="M23.5 6.19a3.02 3.02 0 0 0-2.12-2.14C19.5 3.55 12 3.55 12 3.55s-7.5 0-9.38.5A3.02 3.02 0 0 0 .5 6.19 31.6 31.6 0 0 0 0 12a31.6 31.6 0 0 0 .5 5.81 3.02 3.02 0 0 0 2.12 2.14c1.88.5 9.38.5 9.38.5s7.5 0 9.38-.5a3.02 3.02 0 0 0 2.12-2.14A31.6 31.6 0 0 0 24 12a31.6 31.6 0 0 0-.5-5.81zM9.55 15.57V8.43L15.82 12z"/></svg>
+    </a>
+  </div>
+</header>
+
+<nav>
+  <a href="#about">About</a><a href="#mixes">Music</a><a href="#content">Content</a><a href="#photos">Photos</a>
+  <a href="#videos">Videos</a><a href="#shows">Venues</a><a href="#events">Events</a><a href="#contact">Booking</a>
+</nav>
+
+<section id="about" class="about-bg">
+  <div class="kicker">Who</div>
+  <h2>About</h2>
+  <div class="about-grid">
+    <p>Sidmastaflex is a DJ, producer, event curator, and beatboxer from the <b>Inland Empire</b> making waves across Southern California. Known for <b>heddy song selection</b>, crowd-reading, and mixing genres like oil and water, he takes every audience on a fresh emotional journey — <b>heavy basslines, deep grooves,</b> and rhythms that hit just right.</p>
+    <div class="residencies">
+      <h3>Former Residencies</h3>
+      <ul>
+        <li>Fr3akuency <span>Orange County</span></li>
+        <li>Casual Hippies <span>Orange County</span></li>
+        <li>Get Weird <span>San Diego</span></li>
+        <li>Team Discotheque <span>Los Angeles</span></li>
+        <li>Euphaura <span>Los Angeles</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="mixes">
+  <div class="kicker">Listen</div>
+  <h2>Mixes &amp; Music</h2>
+  <div class="sc-embed">
+    <iframe title="Sidmastaflex on SoundCloud" width="100%" height="420" scrolling="no" frameborder="no" loading="lazy"
+      src="https://w.soundcloud.com/player/?url=https%3A%2F%2Fsoundcloud.com%2Fsidmastaflex&color=%238b5cf6&auto_play=false&show_user=true"></iframe>
+  </div>
+  <div class="platforms">
+    <a href="https://soundcloud.com/sidmastaflex" target="_blank" rel="noopener">SoundCloud</a>
+    <a href="https://open.spotify.com/user/sidmastaflex" target="_blank" rel="noopener">Spotify</a>
+    <a href="https://www.youtube.com/@sidmastaflexmusic" target="_blank" rel="noopener">YouTube</a>
+  </div>
+</section>
+
+<section id="content">
+  <div class="kicker">Watch</div>
+  <h2>Content</h2>
+  <div class="tt-embed">
+    <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@sidmastaflex" data-unique-id="sidmastaflex" data-embed-type="creator" style="max-width: 780px; min-width: 288px;">
+      <section><a target="_blank" rel="noopener" href="https://www.tiktok.com/@sidmastaflex?refer=creator_embed">@sidmastaflex on TikTok</a></section>
+    </blockquote>
+  </div>
+</section>
+
+<section id="photos">
+  <div class="kicker">Press</div>
+  <h2>Photos</h2>
+  <div class="filters" id="filters"></div>
+  <div class="grid" id="grid"></div>
+</section>
+
+<section id="videos">
+  <div class="kicker">In the wild</div>
+  <h2>Videos</h2>
+  <div class="vids">
+    <video src="assets/video/Sidmastaflex_Tower69_LiB-1.mp4" controls muted playsinline preload="metadata"></video>
+    <video src="assets/video/Sidmastaflex_Tower69_LiB-2.mp4" controls muted playsinline preload="metadata"></video>
+    <video src="assets/video/Sidmastaflex_Tower69_LiB-3.mp4" controls muted playsinline preload="metadata"></video>
+    <video src="assets/video/Sidmastaflex_Tower69_LiB-4.mp4" controls muted playsinline preload="metadata"></video>
+    <video src="assets/video/Sidmastaflex_Groovin.mp4" controls muted playsinline preload="metadata"></video>
+    <video src="assets/video/Sidmastaflex_LitCrowd.mp4" controls muted playsinline preload="metadata"></video>
+    <video src="assets/video/Sidmastaflex_VibingWithCrowd.mp4" controls muted playsinline preload="metadata"></video>
+    <video src="assets/video/Sidmastaflex_Damn.mp4" controls muted playsinline preload="metadata"></video>
+  </div>
+</section>
+
+<section id="shows">
+  <div class="kicker">Track record</div>
+  <h2>Venues &amp; Festivals</h2>
+  <ul class="shows">
+    <li><span class="venue">Lightning in a Bottle — Bakersfield</span><span class="year">2026</span></li>
+    <li><span class="venue">Spinn Nightclub — San Diego</span><span class="year">2026</span></li>
+    <li><span class="venue">Plurity — Lancaster</span><span class="year">2026</span></li>
+    <li><span class="venue">Camp Breaktime — Lancaster</span><span class="year">2026</span></li>
+    <li><span class="venue">Grayson Bar — Los Angeles</span><span class="year">2026</span></li>
+    <li><span class="venue">Social Desert Festival</span><span class="year">2025</span></li>
+    <li><span class="venue">Dirty Laundry — Los Angeles</span><span class="year">2025</span></li>
+    <li><span class="venue">SoundTech — Long Beach</span><span class="year">2025</span></li>
+    <li><span class="venue">The S — Anaheim</span><span class="year">2025</span></li>
+    <li><span class="venue">Kitsch Bar — Costa Mesa</span><span class="year">2025</span></li>
+    <li><span class="venue">Cranes Bar — Los Angeles</span><span class="year">2025</span></li>
+    <li><span class="venue">Top Floor — Santa Ana</span><span class="year">2025</span></li>
+    <li><span class="venue">Speakeasy OC — Garden Grove</span><span class="year">2025</span></li>
+    <li><span class="venue">Backstage — Santa Barbara</span><span class="year">2024</span></li>
+    <li><span class="venue">Snowchella Festival</span><span class="year">2023</span></li>
+    <li><span class="venue">Station 1640 — Los Angeles</span><span class="year">2022</span></li>
+  </ul>
+</section>
+
+<section id="events">
+  <div class="kicker">Flyer wall</div>
+  <h2>Past Events</h2>
+  <div class="flyers" id="flyerwall"></div>
+</section>
+
+<section id="contact">
+  <div class="kicker">Bookings · Press · Collabs</div>
+  <h2>Get In Touch</h2>
+  <a class="email" href="mailto:booking@sidmastaflex.com">booking@sidmastaflex.com</a>
+  <div class="socials">
+    <a href="https://www.instagram.com/sidmastaflex_/" target="_blank" rel="noopener">Instagram</a>
+    <a href="https://www.tiktok.com/@sidmastaflex" target="_blank" rel="noopener">TikTok</a>
+    <a href="https://www.youtube.com/@sidmastaflexmusic" target="_blank" rel="noopener">YouTube</a>
+  </div>
+</section>
+
+<div id="lightbox"><img alt=""></div>
+<footer>Sidmastaflex © <span id="yr"></span> — Inland Empire · Southern California</footer>
+
+<script src="assets/photos.js"></script>
+<script src="assets/flyers.js"></script>
+<script async src="https://www.tiktok.com/embed.js"></script>
+<script>
+document.getElementById("yr").textContent = new Date().getFullYear();
+
+/* nav + CTA anchor fallback: some embedded previews block hash navigation */
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener("click", e => {
+    const el = document.getElementById(a.getAttribute("href").slice(1));
+    if (el) { e.preventDefault(); el.scrollIntoView({ behavior: "smooth" }); }
+  });
+});
+
+/* --- hero sacred-geometry backdrop (echoes the logo) --- */
+(function () {
+  const NS = "http://www.w3.org/2000/svg", svg = document.getElementById("geo");
+  const cx = 500, cy = 470, R = 380, n = 9;
+  const pts = [];
+  for (let i = 0; i < n; i++) {
+    const a = -Math.PI / 2 + i * 2 * Math.PI / n;
+    pts.push([cx + R * Math.cos(a), cy + R * Math.sin(a)]);
+  }
+  const g = document.createElementNS(NS, "g");
+  const circ = document.createElementNS(NS, "circle");
+  circ.setAttribute("cx", cx); circ.setAttribute("cy", cy); circ.setAttribute("r", R);
+  circ.setAttribute("fill", "none"); circ.setAttribute("stroke", "rgba(139,92,246,.5)"); circ.setAttribute("stroke-width", "1.5");
+  g.appendChild(circ);
+  for (let i = 0; i < n; i++) for (let j = i + 1; j < n; j++) {
+    const l = document.createElementNS(NS, "line");
+    l.setAttribute("x1", pts[i][0]); l.setAttribute("y1", pts[i][1]);
+    l.setAttribute("x2", pts[j][0]); l.setAttribute("y2", pts[j][1]);
+    l.setAttribute("stroke", "rgba(236,234,244,.22)"); l.setAttribute("stroke-width", ".7");
+    g.appendChild(l);
+  }
+  svg.appendChild(g);
+  let t = 0;
+  (function spin() {
+    t += 0.008;
+    g.setAttribute("transform", `rotate(${t} ${cx} ${cy})`);
+    requestAnimationFrame(spin);
+  })();
+})();
+
+/* --- photo gallery with event filters + lightbox --- */
+(function () {
+  const photos = window.PHOTOS || [];
+  const nice = e => e.replace(/^\d+\s*/, "").replace(/\s*\((BEST|2024|2025)\)\s*/gi, "").trim();
+  const events = [...new Set(photos.map(p => p.event))];
+  const filters = document.getElementById("filters"), grid = document.getElementById("grid");
+  let current = "all";
+  function render() {
+    grid.innerHTML = "";
+    photos.filter(p => current === "all" || p.event === current).forEach(p => {
+      const img = document.createElement("img");
+      img.loading = "lazy"; img.src = "assets/thumbs/" + p.file; img.alt = nice(p.event);
+      img.onclick = () => {
+        const lb = document.getElementById("lightbox");
+        lb.querySelector("img").src = "assets/photos/" + p.file;
+        lb.style.display = "flex";
+      };
+      grid.appendChild(img);
+    });
+  }
+  function mkBtn(label, val) {
+    const b = document.createElement("button");
+    b.textContent = label;
+    b.onclick = () => { current = val; render();
+      filters.querySelectorAll("button").forEach(x => x.classList.toggle("on", x === b)); };
+    filters.appendChild(b); return b;
+  }
+  mkBtn("All", "all").classList.add("on");
+  events.forEach(e => mkBtn(nice(e), e));
+  render();
+  document.getElementById("lightbox").onclick = e => e.currentTarget.style.display = "none";
+})();
+
+/* --- past-events flyer wall --- */
+(function () {
+  const wall = document.getElementById("flyerwall");
+  (window.FLYERS || []).forEach(f => {
+    const fig = document.createElement("figure");
+    const img = document.createElement("img");
+    img.loading = "lazy"; img.src = "assets/flyers/" + f.file; img.alt = f.name + " flyer";
+    img.onclick = () => {
+      const lb = document.getElementById("lightbox");
+      lb.querySelector("img").src = "assets/flyers/" + f.file;
+      lb.style.display = "flex";
+    };
+    const cap = document.createElement("figcaption");
+    cap.textContent = f.name;
+    fig.appendChild(img); fig.appendChild(cap); wall.appendChild(fig);
+  });
+})();
+</script>
+</body>
+</html>

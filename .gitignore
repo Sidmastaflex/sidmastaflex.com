@@ -1,0 +1,5 @@
+# local review / staging artifacts — not part of the public site
+flyers.html
+assets/flyers_raw/
+assets/photos.json
+deploy_sidmastaflex.zip
