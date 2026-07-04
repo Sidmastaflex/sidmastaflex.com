@@ -92,30 +92,27 @@
   nav a { color: var(--dim); } nav a:hover { color: var(--ink); text-decoration: none; }
 
   /* ---------- about ---------- */
-  .about-bg {
-    max-width: none; position: relative; isolation: isolate;
-    background: url("assets/about_bg.jpg") center 30% / cover no-repeat;
-    border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
-    padding-bottom: 5.5rem; margin-bottom: -5.5rem;
+  .about-grid { display: grid; grid-template-columns: .8fr 1.3fr .9fr; gap: 2.5rem; align-items: start; }
+  .about-photo {
+    width: 100%; display: block; border: 1px solid var(--line);
+    filter: saturate(.9); box-shadow: 0 8px 40px rgba(139,92,246,.15);
   }
-  .about-bg::before {
-    content: ""; position: absolute; inset: 0; z-index: -1;
-    background: linear-gradient(180deg, var(--bg) 0%, rgba(8,8,11,.55) 25%, rgba(8,8,11,.55) 75%, var(--bg) 100%);
-  }
-  .about-bg > * { max-width: 1100px; margin-left: auto; margin-right: auto; }
-  .about-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 2.5rem; align-items: start; }
   .about-grid p { color: var(--dim); font-size: 1.05rem; }
   .about-grid p b { color: var(--ink); }
   .residencies { border: 1px solid var(--line); padding: 1.5rem; background: var(--bg2); }
   .residencies h3 { font-size: .8rem; letter-spacing: .3em; color: var(--acc); margin-bottom: 1rem; }
   .residencies li { list-style: none; padding: .55rem 0; border-bottom: 1px solid var(--line); color: var(--ink); font-weight: 600; }
   .residencies li span { color: var(--dim); font-weight: 400; float: right; }
-  @media (max-width: 760px) { .about-grid { grid-template-columns: 1fr; } }
+  @media (max-width: 760px) {
+    .about-grid { grid-template-columns: 1fr; }
+    .about-photo { max-width: 340px; margin: 0 auto; }
+  }
 
   /* ---------- mixes ---------- */
   #mixes { padding-top: 9.5rem; }
   .sc-embed { border: 1px solid var(--line); background: var(--bg2); }
-  .tt-embed { border: 1px solid var(--line); background: var(--bg2); padding: 1rem; display: flex; justify-content: center; }
+  .tt-embed { display: flex; justify-content: center; }
+  .tt-embed .tiktok-embed { margin: 0; }
   .platforms { display: flex; gap: 1.2rem; margin-top: 1.2rem; flex-wrap: wrap; }
   .platforms a { color: var(--dim); font-size: .8rem; letter-spacing: .2em; text-transform: uppercase; border: 1px solid var(--line); padding: .5rem 1rem; }
   .platforms a:hover { color: var(--ink); border-color: var(--acc); text-decoration: none; }
@@ -199,10 +196,11 @@
   <a href="#videos">Videos</a><a href="#shows">Venues</a><a href="#events">Events</a><a href="#contact">Booking</a>
 </nav>
 
-<section id="about" class="about-bg">
+<section id="about">
   <div class="kicker">Who</div>
   <h2>About</h2>
   <div class="about-grid">
+    <img class="about-photo" src="assets/photos/1-at230-photoshoot-best_sidmastaflex_facecover.jpg" alt="Sidmastaflex portrait">
     <p>Sidmastaflex is a DJ, producer, event curator, and beatboxer from the <b>Inland Empire</b> making waves across Southern California. Known for <b>heddy song selection</b>, crowd-reading, and mixing genres like oil and water, he takes every audience on a fresh emotional journey — <b>heavy basslines, deep grooves,</b> and rhythms that hit just right.</p>
     <div class="residencies">
       <h3>Former Residencies</h3>
