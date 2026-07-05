@@ -108,6 +108,20 @@
     .about-photo { max-width: 340px; margin: 0 auto; }
   }
 
+  /* ---------- upcoming events ---------- */
+  .upcoming-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1rem; }
+  .upcoming-grid a {
+    display: block; border: 1px solid var(--acc); background: var(--bg2);
+    transition: box-shadow .25s, transform .25s; text-decoration: none;
+  }
+  .upcoming-grid a:hover { box-shadow: 0 0 28px rgba(139,92,246,.45); transform: translateY(-3px); }
+  .upcoming-grid img { width: 100%; aspect-ratio: 4/5; object-fit: cover; display: block; }
+  .upcoming-grid .ev-t {
+    color: var(--ink); font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+    font-size: .8rem; padding: .7rem .8rem .2rem;
+  }
+  .upcoming-grid .ev-cta { color: var(--acc2); font-size: .72rem; letter-spacing: .2em; text-transform: uppercase; padding: 0 .8rem .8rem; }
+
   /* ---------- mixes ---------- */
   #mixes { padding-top: 9.5rem; }
   .sc-embed { border: 1px solid var(--line); background: var(--bg2); }
@@ -192,7 +206,7 @@
 </header>
 
 <nav>
-  <a href="#about">About</a><a href="#mixes">Music</a><a href="#content">Content</a><a href="#photos">Photos</a>
+  <a href="#about">About</a><a href="#upcoming" id="nav-upcoming" style="display:none">Upcoming</a><a href="#mixes">Music</a><a href="#content">Content</a><a href="#photos">Photos</a>
   <a href="#videos">Videos</a><a href="#shows">Venues</a><a href="#events">Events</a><a href="#contact">Booking</a>
 </nav>
 
@@ -213,6 +227,12 @@
       </ul>
     </div>
   </div>
+</section>
+
+<section id="upcoming" style="display:none">
+  <div class="kicker">Catch me live</div>
+  <h2>Upcoming Events</h2>
+  <div class="upcoming-grid" id="upcoming-grid"></div>
 </section>
 
 <section id="mixes">
@@ -380,6 +400,27 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
   render();
   document.getElementById("lightbox").onclick = e => e.currentTarget.style.display = "none";
 })();
+
+/* --- upcoming events (synced from Linktree via GitHub Action) --- */
+fetch("assets/events.json").then(r => r.ok ? r.json() : null).then(d => {
+  const evs = (d && d.events) || [];
+  if (!evs.length) return;
+  const grid = document.getElementById("upcoming-grid");
+  evs.forEach(ev => {
+    const a = document.createElement("a");
+    a.href = ev.url; a.target = "_blank"; a.rel = "noopener";
+    if (ev.image) {
+      const img = document.createElement("img");
+      img.loading = "lazy"; img.src = ev.image; img.alt = ev.title + " flyer";
+      a.appendChild(img);
+    }
+    const t = document.createElement("div"); t.className = "ev-t"; t.textContent = ev.title || "Event";
+    const c = document.createElement("div"); c.className = "ev-cta"; c.textContent = "RSVP / Tickets →";
+    a.appendChild(t); a.appendChild(c); grid.appendChild(a);
+  });
+  document.getElementById("upcoming").style.display = "";
+  document.getElementById("nav-upcoming").style.display = "";
+}).catch(() => {});
 
 /* --- past-events flyer wall --- */
 (function () {
