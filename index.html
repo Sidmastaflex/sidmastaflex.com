@@ -380,9 +380,19 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
   const events = [...new Set(photos.map(p => p.event))];
   const filters = document.getElementById("filters"), grid = document.getElementById("grid");
   let current = "all";
+  /* "All" view: hand-picked highlights first, then the rest interleaved across packs */
+  const FEATURED = ["1-at230-photoshoot-best_sidmastaflex_facecover.jpg", "2-yrr-2-kool-fest-2024_sidmastaflex_chemistry.jpg", "3-team-discotheque_img_20250329_161012_300.jpg", "5-mountain-rave_img_1890.jpg", "1-at230-photoshoot-best_sidmastaflex_hunter.jpg", "3-team-discotheque_img_20250426_144136_442.jpg", "2-yrr-2-kool-fest-2024_sidmastaflex_cookin3.jpg", "6-euphaura-subvault_img_20250616_143805_951.jpg", "1-at230-photoshoot-best_sidmastaflex_chain.jpg", "2-yrr-2-kool-fest-2024_sidmastaflex_cookin.jpg", "3-team-discotheque_img_20250419_022027_161.jpg", "5-mountain-rave_img_1958.jpg", "1-at230-photoshoot-best_sidmastaflex_car.jpg", "2-yrr-2-kool-fest-2024_sidmastaflex_chemistry2.jpg"];
+  const allOrder = (() => {
+    const byFile = new Map(photos.map(p => [p.file, p]));
+    const out = FEATURED.map(f => byFile.get(f)).filter(Boolean);
+    const used = new Set(out.map(p => p.file));
+    const queues = events.map(e => photos.filter(p => p.event === e && !used.has(p.file)));
+    while (queues.some(q => q.length)) queues.forEach(q => { if (q.length) out.push(q.shift()); });
+    return out;
+  })();
   function render() {
     grid.innerHTML = "";
-    photos.filter(p => current === "all" || p.event === current).forEach(p => {
+    (current === "all" ? allOrder : photos.filter(p => p.event === current)).forEach(p => {
       const img = document.createElement("img");
       img.loading = "lazy"; img.src = "assets/thumbs/" + p.file; img.alt = nice(p.event);
       img.onclick = () => {
