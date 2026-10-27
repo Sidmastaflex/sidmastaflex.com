@@ -42,9 +42,14 @@
     align-items: center; justify-content: center; text-align: center;
     position: relative; padding: 2rem 1rem; isolation: isolate;
   }
-  #geo { position: absolute; inset: 0; z-index: -1; opacity: .5; }
-  .geo-spin { transform-origin: 500px 470px; animation: geospin 750s linear infinite; }
-  @keyframes geospin { to { transform: rotate(360deg); } }
+  header { overflow: hidden; }
+  #geo {
+    position: absolute; z-index: -1; opacity: .5; pointer-events: none;
+    width: max(76vw, 76svh); aspect-ratio: 1; left: 50%; top: calc(50% - max(3vw, 3svh));
+    transform: translate(-50%, -50%); will-change: transform;
+  }
+  .geo-spin { animation: geospin 750s linear infinite; }
+  @keyframes geospin { from { transform: translate(-50%, -50%) rotate(0deg); } to { transform: translate(-50%, -50%) rotate(360deg); } }
   header.offscreen .geo-spin, header.offscreen .glitch::before, header.offscreen .glitch::after { animation-play-state: paused; }
   @media (prefers-reduced-motion: reduce) { .geo-spin, .glitch::before, .glitch::after { animation: none; } }
   header::after {
@@ -191,7 +196,7 @@
 <body>
 
 <header>
-  <svg id="geo" viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid slice" aria-hidden="true"></svg>
+  <svg id="geo" class="geo-spin" viewBox="118 88 764 764" aria-hidden="true"></svg>
   <img class="logo" src="assets/logo.png" alt="Sidmastaflex sacred geometry logo">
   <h1 class="name glitch" data-t="SIDMASTAFLEX">SIDMASTAFLEX</h1>
   <div class="tag">DJ &nbsp;·&nbsp; Producer &nbsp;·&nbsp; Event Curator &nbsp;·&nbsp; Beatboxer</div>
@@ -282,14 +287,14 @@
   <div class="kicker">In the wild</div>
   <h2>Videos</h2>
   <div class="vids">
-    <video src="assets/video/Sidmastaflex_Tower69_LiB-1.mp4" controls muted playsinline preload="metadata"></video>
-    <video src="assets/video/Sidmastaflex_Tower69_LiB-2.mp4" controls muted playsinline preload="metadata"></video>
-    <video src="assets/video/Sidmastaflex_Tower69_LiB-3.mp4" controls muted playsinline preload="metadata"></video>
-    <video src="assets/video/Sidmastaflex_Tower69_LiB-4.mp4" controls muted playsinline preload="metadata"></video>
-    <video src="assets/video/Sidmastaflex_Groovin.mp4" controls muted playsinline preload="metadata"></video>
-    <video src="assets/video/Sidmastaflex_LitCrowd.mp4" controls muted playsinline preload="metadata"></video>
-    <video src="assets/video/Sidmastaflex_VibingWithCrowd.mp4" controls muted playsinline preload="metadata"></video>
-    <video src="assets/video/Sidmastaflex_Damn.mp4" controls muted playsinline preload="metadata"></video>
+    <video src="assets/video/Sidmastaflex_Tower69_LiB-1.mp4" poster="assets/video/posters/Sidmastaflex_Tower69_LiB-1.jpg" controls muted playsinline preload="none"></video>
+    <video src="assets/video/Sidmastaflex_Tower69_LiB-2.mp4" poster="assets/video/posters/Sidmastaflex_Tower69_LiB-2.jpg" controls muted playsinline preload="none"></video>
+    <video src="assets/video/Sidmastaflex_Tower69_LiB-3.mp4" poster="assets/video/posters/Sidmastaflex_Tower69_LiB-3.jpg" controls muted playsinline preload="none"></video>
+    <video src="assets/video/Sidmastaflex_Tower69_LiB-4.mp4" poster="assets/video/posters/Sidmastaflex_Tower69_LiB-4.jpg" controls muted playsinline preload="none"></video>
+    <video src="assets/video/Sidmastaflex_Groovin.mp4" poster="assets/video/posters/Sidmastaflex_Groovin.jpg" controls muted playsinline preload="none"></video>
+    <video src="assets/video/Sidmastaflex_LitCrowd.mp4" poster="assets/video/posters/Sidmastaflex_LitCrowd.jpg" controls muted playsinline preload="none"></video>
+    <video src="assets/video/Sidmastaflex_VibingWithCrowd.mp4" poster="assets/video/posters/Sidmastaflex_VibingWithCrowd.jpg" controls muted playsinline preload="none"></video>
+    <video src="assets/video/Sidmastaflex_Damn.mp4" poster="assets/video/posters/Sidmastaflex_Damn.jpg" controls muted playsinline preload="none"></video>
   </div>
 </section>
 
@@ -351,6 +356,16 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
   });
 });
 
+/* --- videos: one at a time, pause when scrolled away --- */
+(function () {
+  const vids = [...document.querySelectorAll(".vids video")];
+  vids.forEach(v => v.addEventListener("play", () => vids.forEach(o => { if (o !== v) o.pause(); })));
+  if ("IntersectionObserver" in window) {
+    const io = new IntersectionObserver(es => es.forEach(e => { if (!e.isIntersecting) e.target.pause(); }));
+    vids.forEach(v => io.observe(v));
+  }
+})();
+
 /* --- hero sacred-geometry backdrop (echoes the logo) --- */
 (function () {
   const NS = "http://www.w3.org/2000/svg", svg = document.getElementById("geo");
@@ -372,7 +387,6 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
     l.setAttribute("stroke", "rgba(236,234,244,.22)"); l.setAttribute("stroke-width", ".7");
     g.appendChild(l);
   }
-  g.setAttribute("class", "geo-spin");
   svg.appendChild(g);
   /* pause hero animations whenever the hero is scrolled out of view */
   const hero = document.querySelector("header");
