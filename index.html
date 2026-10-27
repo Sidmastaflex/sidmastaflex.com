@@ -138,11 +138,15 @@
     padding: .45rem 1rem; font-size: .72rem; letter-spacing: .18em; text-transform: uppercase; cursor: pointer;
   }
   .filters button.on { border-color: var(--acc); color: var(--ink); background: rgba(139,92,246,.15); }
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: .6rem; }
+  /* justified rows: each photo keeps its own shape, rows fill the width */
+  .grid { display: flex; flex-wrap: wrap; gap: .6rem; --rh: 230px; }
+  .grid::after { content: ""; flex-grow: 999999; }
   .grid img {
-    width: 100%; aspect-ratio: 1; object-fit: cover; display: block; cursor: pointer;
+    height: var(--rh); flex-grow: calc(var(--ar) * 100); flex-basis: calc(var(--ar) * var(--rh));
+    min-width: 0; max-width: calc(var(--ar) * var(--rh) * 1.45); object-fit: cover; object-position: 50% 30%; display: block; cursor: pointer;
     filter: saturate(.92); transition: transform .25s, filter .25s; background: var(--bg2);
   }
+  @media (max-width: 640px) { .grid { --rh: 118px; gap: .35rem; } }
   .grid img:hover { transform: scale(1.03); filter: saturate(1.1); }
   #lightbox {
     position: fixed; inset: 0; background: rgba(5,5,8,.95); display: none;
@@ -394,7 +398,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
     grid.innerHTML = "";
     (current === "all" ? allOrder : photos.filter(p => p.event === current)).forEach(p => {
       const img = document.createElement("img");
-      img.loading = "lazy"; img.src = "assets/thumbs/" + p.file; img.alt = nice(p.event);
+      img.loading = "lazy"; img.src = "assets/thumbs/" + p.file; img.style.setProperty("--ar", (p.w / p.h).toFixed(3)); img.alt = nice(p.event);
       img.onclick = () => {
         const lb = document.getElementById("lightbox");
         lb.querySelector("img").src = "assets/photos/" + p.file;
