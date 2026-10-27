@@ -43,6 +43,10 @@
     position: relative; padding: 2rem 1rem; isolation: isolate;
   }
   #geo { position: absolute; inset: 0; z-index: -1; opacity: .5; }
+  .geo-spin { transform-origin: 500px 470px; animation: geospin 750s linear infinite; }
+  @keyframes geospin { to { transform: rotate(360deg); } }
+  header.offscreen .geo-spin, header.offscreen .glitch::before, header.offscreen .glitch::after { animation-play-state: paused; }
+  @media (prefers-reduced-motion: reduce) { .geo-spin, .glitch::before, .glitch::after { animation: none; } }
   header::after {
     content: ""; position: absolute; inset: 0; z-index: -1;
     background: radial-gradient(ellipse at 50% 45%, transparent 20%, var(--bg) 78%);
@@ -85,7 +89,7 @@
 
   nav {
     position: sticky; top: 0; z-index: 50; display: flex; justify-content: center; gap: 1.7rem;
-    padding: .9rem 1rem; background: rgba(8,8,11,.82); backdrop-filter: blur(10px);
+    padding: .9rem 1rem; background: rgba(8,8,11,.96);
     border-bottom: 1px solid var(--line); font-size: .75rem; letter-spacing: .22em; text-transform: uppercase;
     flex-wrap: wrap;
   }
@@ -368,13 +372,13 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
     l.setAttribute("stroke", "rgba(236,234,244,.22)"); l.setAttribute("stroke-width", ".7");
     g.appendChild(l);
   }
+  g.setAttribute("class", "geo-spin");
   svg.appendChild(g);
-  let t = 0;
-  (function spin() {
-    t += 0.008;
-    g.setAttribute("transform", `rotate(${t} ${cx} ${cy})`);
-    requestAnimationFrame(spin);
-  })();
+  /* pause hero animations whenever the hero is scrolled out of view */
+  const hero = document.querySelector("header");
+  if ("IntersectionObserver" in window) {
+    new IntersectionObserver(([e]) => hero.classList.toggle("offscreen", !e.isIntersecting)).observe(hero);
+  }
 })();
 
 /* --- photo gallery with event filters + lightbox --- */
