@@ -148,6 +148,12 @@
   details[open] summary::after { content: "–"; }
   details p { color: var(--dim); margin-top: .6rem; max-width: 70ch; }
 
+  /* reviews */
+  .quotes { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; }
+  .quote { border: 1px solid var(--line); background: var(--bg2); padding: 1.4rem; }
+  .quote .stars { color: var(--warm); letter-spacing: .15em; }
+  .quote p { margin: .7rem 0 1rem; }
+  .quote .who { color: var(--dim); font-size: .9rem; }
   /* booking form */
   form { display: grid; grid-template-columns: 1fr 1fr; gap: .9rem 1rem; border: 1px solid var(--line); background: var(--bg2); padding: 1.6rem; }
   form .full { grid-column: 1 / -1; }
@@ -329,19 +335,29 @@
   <details><summary>Can you play the music for my culture's traditions?</summary><p>Yes. Tell me the moments that matter (entrances, dances, rituals) and I'll build the night around them, including custom edits.</p></details>
 </section>
 
+<!-- Reviews: unhide once Google reviews come in. Paste each review's text into a .quote block and set the Google link. -->
+<section id="reviews" hidden>
+  <div class="kicker">Reviews</div>
+  <h2>What clients say</h2>
+  <div class="quotes">
+    <div class="quote"><div class="stars">★★★★★</div><p>"Review text."</p><div class="who"><b>Name</b> · Event type</div></div>
+  </div>
+  <p class="note"><a href="#" id="greviews" target="_blank" rel="noopener">See all reviews on Google →</a></p>
+</section>
+
 <section id="book">
   <div class="kicker">Book</div>
   <h2>Get a quote</h2>
   <p class="lead">Tell me about your event and I'll confirm I'm free and send a quote, usually within a few hours.</p>
   <form id="bookform" novalidate>
-    <div><label for="f-name">Your name</label><input id="f-name" name="name" required autocomplete="name"></div>
-    <div><label for="f-phone">Phone</label><input id="f-phone" name="phone" type="tel" autocomplete="tel"></div>
-    <div><label for="f-email">Email</label><input id="f-email" name="email" type="email" autocomplete="email"></div>
+    <div><label for="f-name">Your name</label><input id="f-name" name="name" required autocomplete="name" placeholder="Jane Doe"></div>
+    <div><label for="f-phone">Phone</label><input id="f-phone" name="phone" type="tel" autocomplete="tel" placeholder="(951) 555-0123"></div>
+    <div><label for="f-email">Email</label><input id="f-email" name="email" type="email" autocomplete="email" placeholder="jane@example.com"></div>
     <div><label for="f-date">Event date</label><input id="f-date" name="date" type="date"></div>
     <div>
       <label for="f-type">Event type</label>
       <select id="f-type" name="type">
-        <option>Wedding</option><option>Mehndi, Sangeet or cultural celebration</option><option>Quinceañera</option>
+        <option>Wedding</option><option>Cultural celebration (Mehndi, Quinceañera, etc.)</option>
         <option>Birthday or house party</option><option>Corporate event</option><option>Equipment rental</option><option value="Other">Other (tell me)</option>
       </select>
       <input id="f-type-other" name="type_other" placeholder="What kind of event?" style="display:none;margin-top:.5rem">
@@ -357,7 +373,7 @@
         <label class="pkgopt"><input type="radio" name="package" value="Equipment rental"><span><b>Equipment rental</b><small>Gear only, no DJ</small></span></label>
       </div>
     </div>
-    <div><label for="f-city">City / venue</label><input id="f-city" name="city" placeholder="e.g. Riverside, backyard"></div>
+    <div><label for="f-city">City / venue</label><input id="f-city" name="city" placeholder="e.g. Riverside / Mission Inn"></div>
     <div><label for="f-guests">Guests &amp; hours</label><input id="f-guests" name="guests" placeholder="e.g. 80 guests, 7–11pm"></div>
     <div class="full"><label for="f-notes">Anything else?</label><textarea id="f-notes" name="notes" placeholder="Vibe, must-plays, special moments, founding client rate…"></textarea></div>
     <div class="full form-actions">
@@ -374,7 +390,7 @@
 
 <footer>
   DJ Sidmastaflex · Sidmastaflex LLC © <span id="yr"></span> · Corona, CA · Serving the IE, OC, LA &amp; San Diego<br><br>
-  <a href="index.html">Artist site, music &amp; press kit →</a>
+  <a href="index.html">Artist site, music &amp; press kit →</a> &nbsp; <a href="software.html">Websites for local businesses →</a>
 </footer>
 
 <script>
