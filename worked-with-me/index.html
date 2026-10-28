@@ -73,6 +73,17 @@
   .err { color: var(--warm); font-size: .9rem; }
   .thanks { display: none; border: 1px solid var(--acc); background: var(--bg2); padding: 2rem 1.6rem; }
   .sent .thanks { display: block; } .sent #tform, .sent .lead { display: none; }
+  .drop { border: 1px dashed var(--line); background: var(--bg3); padding: .9rem; }
+  .drop input[type=file] { border: 0; background: transparent; padding: 0; }
+  .files { list-style: none; margin-top: .5rem; font-size: .85rem; color: var(--dim); }
+  .files li { display: flex; justify-content: space-between; gap: .6rem; padding: .25rem 0; border-bottom: 1px solid var(--line); }
+  .files li b { color: var(--ink); font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .files button { background: none; border: 0; color: var(--dim); cursor: pointer; font-size: .9rem; }
+  .prog { display: none; grid-column: 1 / -1; }
+  .bar { height: 8px; background: var(--bg3); border: 1px solid var(--line); margin-top: .4rem; }
+  .bar i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--acc), var(--acc2)); transition: width .2s; }
+  .uploading .prog { display: block; }
+  .uploading button[type=submit] { opacity: .5; pointer-events: none; }
 </style>
 </head>
 <body>
@@ -84,58 +95,65 @@
 
   <div class="thanks">
     <h2 style="font-size:1.4rem">Got it, thank you!</h2>
-    <p style="color:var(--dim);margin-top:.6rem">Your testimonial came through. I'll let you know before anything goes live.</p>
+    <p style="color:var(--dim);margin-top:.6rem">Your testimonial and files came through. I'll let you know before anything goes live.</p>
   </div>
 
-  <form id="tform" action="https://formsubmit.co/booking@sidmastaflex.com" method="POST" enctype="multipart/form-data">
-    <input type="hidden" name="_subject" value="New testimonial (software)">
-    <input type="hidden" name="_template" value="table">
-    <input type="hidden" name="_next" value="https://sidmastaflex.com/worked-with-me/?sent=1">
-    <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
-
+  <form id="tform" novalidate>
     <h3>About you</h3>
-    <div><label for="t-name">Your name <span class="req">*</span></label><input id="t-name" name="Name" required autocomplete="name" placeholder="Jane Doe"></div>
-    <div><label for="t-email">Email <span class="req">*</span></label><input id="t-email" name="email" type="email" required autocomplete="email" placeholder="jane@example.com"><div class="hint">Only so I can follow up. Never shown.</div></div>
-    <div><label for="t-biz">Business name</label><input id="t-biz" name="Business" autocomplete="organization" placeholder="Jane's Bakery"></div>
-    <div><label for="t-role">Your role</label><input id="t-role" name="Role" placeholder="Owner"></div>
-    <div><label for="t-city">City</label><input id="t-city" name="City" placeholder="Corona"></div>
-    <div><label for="t-site">Website or Instagram</label><input id="t-site" name="Link" placeholder="janesbakery.com"></div>
+    <div><label for="t-name">Your name <span class="req">*</span></label><input id="t-name" data-k="Name" required autocomplete="name" placeholder="Jane Doe"></div>
+    <div><label for="t-email">Email <span class="req">*</span></label><input id="t-email" data-k="Email" type="email" required autocomplete="email" placeholder="jane@example.com"><div class="hint">Only so I can follow up. Never shown.</div></div>
+    <div><label for="t-phone">Phone</label><input id="t-phone" data-k="Phone" type="tel" autocomplete="tel" placeholder="(951) 555-0123"></div>
+    <div><label for="t-biz">Business name</label><input id="t-biz" data-k="Business" autocomplete="organization" placeholder="Jane's Bakery"></div>
+    <div><label for="t-role">Your role</label><input id="t-role" data-k="Role" placeholder="Owner"></div>
+    <div><label for="t-city">City</label><input id="t-city" data-k="City" placeholder="Corona"></div>
+
+    <h3>Your website</h3>
+    <div class="full"><label for="t-site">Website address</label><input id="t-site" data-k="Website" inputmode="url" placeholder="janesbakery.com"><div class="hint">The site I built or worked on, if there is one.</div></div>
+
+    <h3>Social media</h3>
+    <div><label for="t-ig">Instagram</label><input id="t-ig" data-k="Instagram" placeholder="@janesbakery"></div>
+    <div><label for="t-tt">TikTok</label><input id="t-tt" data-k="TikTok" placeholder="@janesbakery"></div>
+    <div><label for="t-fb">Facebook</label><input id="t-fb" data-k="Facebook" placeholder="facebook.com/janesbakery"></div>
+    <div><label for="t-yelp">Yelp or Google listing</label><input id="t-yelp" data-k="Yelp / Google" placeholder="Link to your listing"></div>
+    <div class="full"><label for="t-oth">Anything else</label><input id="t-oth" data-k="Other social" placeholder="YouTube, LinkedIn, etc."></div>
 
     <h3>Your experience</h3>
     <div class="full">
       <span class="lbl">Overall rating <span class="req">*</span></span>
       <div class="stars" role="radiogroup" aria-label="Rating out of 5">
-        <input type="radio" id="s5" name="Rating" value="5 / 5" required><label for="s5" title="5 stars">★</label>
+        <input type="radio" id="s5" name="Rating" value="5 / 5"><label for="s5" title="5 stars">★</label>
         <input type="radio" id="s4" name="Rating" value="4 / 5"><label for="s4" title="4 stars">★</label>
         <input type="radio" id="s3" name="Rating" value="3 / 5"><label for="s3" title="3 stars">★</label>
         <input type="radio" id="s2" name="Rating" value="2 / 5"><label for="s2" title="2 stars">★</label>
         <input type="radio" id="s1" name="Rating" value="1 / 5"><label for="s1" title="1 star">★</label>
       </div>
     </div>
-    <div class="full"><label for="t-project">What did I build or fix for you?</label><input id="t-project" name="Project" placeholder="e.g. New website with online booking"></div>
-    <div class="full"><label for="t-before">What was the problem before?</label><textarea id="t-before" name="Before" placeholder="e.g. Our old site was covered in ads and customers kept calling to ask our hours."></textarea></div>
-    <div class="full"><label for="t-after">What's changed since? <span class="req">*</span></label><textarea id="t-after" name="Result" required placeholder="e.g. More bookings, fewer phone calls, new customers finding us on Google. Numbers help if you have them."></textarea></div>
-    <div class="full"><label for="t-quote">Your testimonial, in your own words <span class="req">*</span></label><textarea id="t-quote" name="Testimonial" required placeholder="What would you tell another business owner who's thinking about hiring me?"></textarea><div class="hint">2–4 sentences is perfect. This is the part that goes on the site.</div></div>
+    <div class="full"><label for="t-project">What did I build or fix for you?</label><input id="t-project" data-k="Project" placeholder="e.g. New website with online booking"></div>
+    <div class="full"><label for="t-before">What was the problem before?</label><textarea id="t-before" data-k="Before" placeholder="e.g. Our old site was covered in ads and customers kept calling to ask our hours."></textarea></div>
+    <div class="full"><label for="t-after">What's changed since? <span class="req">*</span></label><textarea id="t-after" data-k="Result" required placeholder="e.g. More bookings, fewer phone calls, new customers finding us on Google. Numbers help if you have them."></textarea></div>
+    <div class="full"><label for="t-quote">Your testimonial, in your own words <span class="req">*</span></label><textarea id="t-quote" data-k="Testimonial" required placeholder="What would you tell another business owner who's thinking about hiring me?"></textarea><div class="hint">2–4 sentences is perfect. This is the part that goes on the site.</div></div>
 
-    <h3>Photos (optional)</h3>
-    <div class="full"><label for="t-photo">A photo of you or your logo</label><input id="t-photo" name="Photo" type="file" accept="image/*"></div>
-    <div><label for="t-b4">Before (screenshot or photo)</label><input id="t-b4" name="Before_image" type="file" accept="image/*"></div>
-    <div><label for="t-af">After (screenshot or photo)</label><input id="t-af" name="After_image" type="file" accept="image/*"></div>
-    <div class="full"><label for="t-vid">Video link</label><input id="t-vid" name="Video_link" type="url" placeholder="Google Drive, YouTube or Instagram link"><div class="hint">Uploads are limited to 10 MB total, so share videos as a link.</div></div>
+    <h3>Photos &amp; video (optional)</h3>
+    <div class="full"><label>A photo of you or your logo</label><div class="drop"><input type="file" data-label="Headshot or logo" accept="image/*"><ul class="files"></ul></div></div>
+    <div><label>Before (photos or screenshots)</label><div class="drop"><input type="file" data-label="Before" accept="image/*" multiple><ul class="files"></ul></div></div>
+    <div><label>After (photos or screenshots)</label><div class="drop"><input type="file" data-label="After" accept="image/*" multiple><ul class="files"></ul></div></div>
+    <div class="full"><label>Videos</label><div class="drop"><input type="file" data-label="Video" accept="video/*" multiple><ul class="files"></ul></div><div class="hint">Phone videos are fine, up to 1 GB each. Big files take a minute on slow connections.</div></div>
+    <div class="full"><label for="t-vid">Or paste video links</label><input id="t-vid" data-k="Video links" placeholder="Google Drive, YouTube or Instagram links"></div>
 
     <h3>Permission</h3>
     <div class="full">
       <span class="lbl">How should your name appear? <span class="req">*</span></span>
       <div class="radios">
-        <label><input type="radio" name="Display_as" value="Full name, role and business" required> Full name, role and business</label>
-        <label><input type="radio" name="Display_as" value="First name and business"> First name and business</label>
-        <label><input type="radio" name="Display_as" value="Business name only"> Business name only</label>
-        <label><input type="radio" name="Display_as" value="Anonymous"> Anonymous ("a local business owner")</label>
+        <label><input type="radio" name="Display" value="Full name, role and business"> Full name, role and business</label>
+        <label><input type="radio" name="Display" value="First name and business"> First name and business</label>
+        <label><input type="radio" name="Display" value="Business name only"> Business name only</label>
+        <label><input type="radio" name="Display" value="Anonymous"> Anonymous ("a local business owner")</label>
       </div>
     </div>
     <div class="full">
-      <label class="consent"><input type="checkbox" name="Consent" value="Yes, permission to publish" required> <span>I give Sidmastaflex LLC permission to publish my testimonial, rating and photos on sidmastaflex.com and its social media, shown the way I chose above. I can ask to have it edited or removed at any time. <span class="req">*</span></span></label>
+      <label class="consent"><input type="checkbox" id="t-consent"> <span>I give Sidmastaflex LLC permission to publish my testimonial, rating, photos and videos on sidmastaflex.com and its social media, shown the way I chose above. I can ask to have it edited or removed at any time. <span class="req">*</span></span></label>
     </div>
+    <div class="prog"><span id="ptext">Uploading…</span><div class="bar"><i id="pbar"></i></div></div>
     <div class="full" style="display:flex;gap:1rem;align-items:center;flex-wrap:wrap">
       <button class="btn" type="submit">Send testimonial</button>
       <span class="err" id="terr"></span>
@@ -144,10 +162,95 @@
 </div>
 <footer>Sidmastaflex Software Services · Sidmastaflex LLC</footer>
 <script>
-if (/[?&]sent=1/.test(location.search)) document.getElementById("page").classList.add("sent");
-document.getElementById("tform").addEventListener("submit", function (e) {
-  var total = 0; this.querySelectorAll("input[type=file]").forEach(function (i) { if (i.files[0]) total += i.files[0].size; });
-  if (total > 10 * 1024 * 1024) { e.preventDefault(); document.getElementById("terr").textContent = "Photos add up to more than 10 MB. Try smaller images or skip one."; }
+/* Set after deploying the Google Apps Script web app (see Code.gs). */
+var ENDPOINT = "";
+var KEY = "swt-7q3k9";
+var CHUNK = 4 * 1024 * 1024; // multiple of 256 KB, as Drive requires
+var MAX = 1024 * 1024 * 1024;
+
+var form = document.getElementById("tform"), err = document.getElementById("terr");
+var picked = []; // {file, label}
+
+/* phone formatting */
+var ph = document.getElementById("t-phone");
+ph.addEventListener("input", function () {
+  var d = ph.value.replace(/\D/g, ""); if (d.length === 11 && d[0] === "1") d = d.slice(1); d = d.slice(0, 10);
+  ph.value = d.length > 6 ? "(" + d.slice(0,3) + ") " + d.slice(3,6) + "-" + d.slice(6) : d.length > 3 ? "(" + d.slice(0,3) + ") " + d.slice(3) : d.length ? "(" + d : "";
+});
+
+/* file pickers keep a running list (pick more than once to add more) */
+function mb(n) { return n > 1048576 ? (n / 1048576).toFixed(1) + " MB" : Math.max(1, Math.round(n / 1024)) + " KB"; }
+function render(drop) {
+  var ul = drop.querySelector(".files"), label = drop.querySelector("input").dataset.label;
+  ul.innerHTML = "";
+  picked.forEach(function (p, i) {
+    if (p.label !== label) return;
+    var li = document.createElement("li");
+    li.innerHTML = "<b></b><span>" + mb(p.file.size) + " <button type=button aria-label=Remove>✕</button></span>";
+    li.querySelector("b").textContent = p.file.name;
+    li.querySelector("button").onclick = function () { picked.splice(i, 1); render(drop); };
+    ul.appendChild(li);
+  });
+}
+document.querySelectorAll(".drop").forEach(function (drop) {
+  var inp = drop.querySelector("input");
+  inp.addEventListener("change", function () {
+    var single = !inp.multiple;
+    if (single) picked = picked.filter(function (p) { return p.label !== inp.dataset.label; });
+    Array.prototype.forEach.call(inp.files, function (f) {
+      if (f.size > MAX) { err.textContent = f.name + " is over 1 GB. Share it as a link instead."; return; }
+      picked.push({ file: f, label: inp.dataset.label });
+    });
+    inp.value = ""; render(drop);
+  });
+});
+
+function call(body) {
+  body.key = KEY;
+  return fetch(ENDPOINT, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(body) })
+    .then(function (r) { return r.json(); })
+    .then(function (j) { if (!j.ok) throw new Error(j.error || "upload failed"); return j; });
+}
+function b64(blob) {
+  return new Promise(function (res, rej) { var r = new FileReader(); r.onload = function () { res(String(r.result).split(",")[1]); }; r.onerror = rej; r.readAsDataURL(blob); });
+}
+
+form.addEventListener("submit", async function (e) {
+  e.preventDefault(); err.textContent = "";
+  var fields = {};
+  form.querySelectorAll("[data-k]").forEach(function (i) { if (i.value.trim()) fields[i.dataset.k] = i.value.trim(); });
+  var rating = form.querySelector("input[name=Rating]:checked"), display = form.querySelector("input[name=Display]:checked");
+  if (!fields.Name || !fields.Email || !fields.Result || !fields.Testimonial || !rating || !display || !document.getElementById("t-consent").checked) {
+    err.textContent = "Please fill in the starred fields, pick a rating and a name option, and check the permission box."; return;
+  }
+  if (!/^\S+@\S+\.\S+$/.test(fields.Email)) { err.textContent = "That email doesn't look right."; return; }
+  fields.Rating = rating.value; fields["Display as"] = display.value; fields.Consent = "Yes, permission to publish";
+  if (!ENDPOINT) { err.textContent = "This form isn't connected yet. Please text Sid at (951) 318-2818."; return; }
+
+  form.classList.add("uploading");
+  var bar = document.getElementById("pbar"), txt = document.getElementById("ptext");
+  var total = picked.reduce(function (a, p) { return a + p.file.size; }, 0), sent = 0, names = [];
+  try {
+    var init = await call({ action: "init", name: fields.Name + (fields.Business ? " - " + fields.Business : "") });
+    for (var i = 0; i < picked.length; i++) {
+      var f = picked[i].file;
+      txt.textContent = "Uploading " + (i + 1) + " of " + picked.length + ": " + f.name;
+      var st = await call({ action: "start", folderId: init.folderId, fileName: f.name, label: picked[i].label, mimeType: f.type || "application/octet-stream", size: f.size });
+      for (var off = 0; off < f.size; off += CHUNK) {
+        var piece = f.slice(off, Math.min(off + CHUNK, f.size));
+        await call({ action: "chunk", session: st.session, offset: off, total: f.size, data: await b64(piece) });
+        sent += piece.size; bar.style.width = (total ? Math.round(sent / total * 100) : 100) + "%";
+      }
+      names.push(picked[i].label + ": " + f.name);
+    }
+    txt.textContent = "Sending…";
+    await call({ action: "finish", folderId: init.folderId, fields: fields, files: names });
+    bar.style.width = "100%";
+    document.getElementById("page").classList.add("sent"); window.scrollTo(0, 0);
+  } catch (x) {
+    form.classList.remove("uploading");
+    err.textContent = "Something went wrong (" + x.message + "). Please try again, or text Sid at (951) 318-2818.";
+  }
 });
 </script>
 </body>

@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>GRID WAR · Sidmastaflex</title>
+<meta name="description" content="Grid War: a battle-royale twist on 2048. Merge tiles, attack six computer opponents and survive. Built by Sidmastaflex Software Services."/>
+<link rel="icon" href="../../assets/logo.png"/>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Press+Start+2P&family=Rajdhani:wght@400;700&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#080808;--bg2:#0f0f0f;--bg3:#141414;
+  --accent:#a0ff80;--accent2:#40ffb0;--accent3:#ff4040;
+  --text:#e0e0d0;--text2:#808080;--text3:#404040;
+  --tile2-bg:#0f1a0f;--tile2-c:#a0ff80;
+  --tile4-bg:#0a1a15;--tile4-c:#70ffb0;
+  --tile8-bg:#0a1520;--tile8-c:#40d0ff;
+  --tile16-bg:#100a20;--tile16-c:#8060ff;
+  --tile32-bg:#200a10;--tile32-c:#ff6060;
+  --tile64-bg:#1a0800;--tile64-c:#ff8030;
+  --tile128-bg:#200a00;--tile128-c:#ffb040;
+  --tile256-bg:#100010;--tile256-c:#ff40ff;
+  --tile512-bg:#001818;--tile512-c:#00ffff;
+  --tile1024-bg:#080010;--tile1024-c:#a080ff;
+  --tile2048-bg:#0a0a00;--tile2048-c:#ffff40;
+  --font-main:'Share Tech Mono',monospace;
+  --font-display:'Share Tech Mono',monospace;
+  --board-border:#1e1e1e;
+  --npc-bg:#0f0f0f;
+  --particle-color:#a0ff80;
+}
+.theme-pipeman{
+  --bg:#5c94fc;--bg2:#4488dd;--bg3:#3377cc;
+  --accent:#ffd700;--accent2:#ff6b6b;--accent3:#ff0000;
+  --text:#fff;--text2:#ffdd88;--text3:#cc8800;
+  --tile2-bg:#92cc41;--tile2-c:#1a3a00;
+  --tile4-bg:#f7d51d;--tile4-c:#5a3e00;
+  --tile8-bg:#e52521;--tile8-c:#fff;
+  --tile16-bg:#0099db;--tile16-c:#fff;
+  --tile32-bg:#f8971d;--tile32-c:#5a3e00;
+  --tile64-bg:#9b59b6;--tile64-c:#fff;
+  --tile128-bg:#e74c3c;--tile128-c:#fff;
+  --tile256-bg:#3498db;--tile256-c:#fff;
+  --tile512-bg:#2ecc71;--tile512-c:#fff;
+  --tile1024-bg:#f39c12;--tile1024-c:#fff;
+  --tile2048-bg:#e91e63;--tile2048-c:#fff;
+  --font-main:'Press Start 2P',monospace;
+  --font-display:'Press Start 2P',monospace;
+  --board-border:#ffd700;
+  --npc-bg:#4488dd;
+  --particle-color:#ffd700;
+}
+.theme-riddim{
+  --bg:#050008;--bg2:#0a000f;--bg3:#10001a;
+  --accent:#cc00ff;--accent2:#ff00aa;--accent3:#ff0055;
+  --text:#f0d0ff;--text2:#9060a0;--text3:#502060;
+  --tile2-bg:#150020;--tile2-c:#cc00ff;
+  --tile4-bg:#200015;--tile4-c:#ff00aa;
+  --tile8-bg:#200005;--tile8-c:#ff0055;
+  --tile16-bg:#100020;--tile16-c:#8800ff;
+  --tile32-bg:#200000;--tile32-c:#ff3300;
+  --tile64-bg:#150015;--tile64-c:#ff00ff;
+  --tile128-bg:#001520;--tile128-c:#00aaff;
+  --tile256-bg:#200010;--tile256-c:#ff0080;
+  --tile512-bg:#100020;--tile512-c:#aa00ff;
+  --tile1024-bg:#050020;--tile1024-c:#6600ff;
+  --tile2048-bg:#200005;--tile2048-c:#ff2200;
+  --font-main:'Rajdhani',sans-serif;
+  --font-display:'Rajdhani',sans-serif;
+  --board-border:#440066;
+  --npc-bg:#0a000f;
+  --particle-color:#cc00ff;
+}
+.theme-fastguy{
+  --bg:#000820;--bg2:#000f35;--bg3:#001850;
+  --accent:#00aaff;--accent2:#ffdd00;--accent3:#ff3300;
+  --text:#ffffff;--text2:#88ccff;--text3:#336699;
+  --tile2-bg:#00204a;--tile2-c:#00aaff;
+  --tile4-bg:#002200;--tile4-c:#44ff44;
+  --tile8-bg:#202000;--tile8-c:#ffdd00;
+  --tile16-bg:#220000;--tile16-c:#ff4400;
+  --tile32-bg:#200020;--tile32-c:#ff00ff;
+  --tile64-bg:#002020;--tile64-c:#00ffff;
+  --tile128-bg:#001a40;--tile128-c:#44aaff;
+  --tile256-bg:#1a1a00;--tile256-c:#ffee44;
+  --tile512-bg:#1a0000;--tile512-c:#ff6644;
+  --tile1024-bg:#001a1a;--tile1024-c:#44ffff;
+  --tile2048-bg:#1a001a;--tile2048-c:#ff44ff;
+  --font-main:'Rajdhani',sans-serif;
+  --font-display:'Rajdhani',sans-serif;
+  --board-border:#003388;
+  --npc-bg:#000f35;
+  --particle-color:#00aaff;
+}
+body{background:var(--bg);color:var(--text);font-family:var(--font-main);overflow-x:hidden;min-height:100vh;}
+canvas#particles{position:fixed;inset:0;pointer-events:none;z-index:0;}
+#backlink{position:fixed;top:10px;left:12px;z-index:50;font-family:var(--font-main);font-size:11px;letter-spacing:0.08em;color:var(--text2);text-decoration:none;background:var(--bg2);border:1px solid var(--text3);padding:5px 9px;}
+#backlink:hover{color:var(--accent);border-color:var(--accent);}
+
+/* ===== SCREENS ===== */
+.screen{display:none;position:relative;z-index:1;}
+.screen.active{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:20px;}
+
+/* ===== HOME ===== */
+#home-screen{gap:32px;}
+#game-logo{font-family:var(--font-display);font-size:clamp(28px,6vw,52px);color:var(--accent);letter-spacing:0.15em;text-align:center;line-height:1.2;}
+#game-logo span{color:var(--accent3);}
+#tagline{font-size:11px;color:var(--text2);letter-spacing:0.2em;text-align:center;}
+#home-btns{display:flex;flex-direction:column;gap:12px;width:260px;}
+.home-btn{background:var(--bg2);border:1px solid var(--text3);color:var(--text);font-family:var(--font-main);font-size:13px;padding:14px 24px;cursor:pointer;letter-spacing:0.15em;transition:all 0.15s;text-align:center;}
+.home-btn:hover{border-color:var(--accent);color:var(--accent);background:var(--bg3);}
+.home-btn.primary{border-color:var(--accent);color:var(--accent);}
+
+/* ===== SETTINGS ===== */
+#settings-screen,#shop-screen,#mode-screen{gap:20px;padding:56px 16px 30px;}
+.panel{background:var(--bg2);border:1px solid var(--text3);padding:20px;width:100%;max-width:560px;}
+.panel-title{font-size:11px;letter-spacing:0.2em;color:var(--accent);margin-bottom:16px;border-bottom:1px solid var(--text3);padding-bottom:8px;}
+.setting-row{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap;}
+.setting-lbl{font-size:12px;color:var(--text2);}
+.setting-val{font-size:12px;color:var(--text);}
+input[type=range]{width:120px;accent-color:var(--accent);}
+.toggle-group{display:flex;gap:6px;flex-wrap:wrap;}
+.tog-btn{background:var(--bg3);border:1px solid var(--text3);color:var(--text2);font-family:var(--font-main);font-size:10px;padding:5px 10px;cursor:pointer;letter-spacing:0.08em;}
+.tog-btn.active{border-color:var(--accent);color:var(--accent);background:var(--bg2);}
+.back-btn{font-family:var(--font-main);font-size:11px;color:var(--text2);background:none;border:1px solid var(--text3);padding:8px 20px;cursor:pointer;letter-spacing:0.15em;}
+.back-btn:hover{color:var(--accent);border-color:var(--accent);}
+
+/* ===== SHOP ===== */
+.shop-item{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px;border:1px solid var(--text3);margin-bottom:10px;background:var(--bg3);}
+.shop-item.locked-item{border-color:#333;opacity:0.85;}
+.shop-item-info .item-name{font-size:13px;color:var(--text);}
+.shop-item-info .item-desc{font-size:10px;color:var(--text2);margin-top:4px;letter-spacing:0.05em;}
+.buy-btn{background:var(--accent);color:#000;font-family:var(--font-main);font-size:11px;padding:8px 14px;border:none;cursor:pointer;letter-spacing:0.1em;font-weight:700;flex-shrink:0;}
+.buy-btn:hover{opacity:0.85;}
+.buy-btn.owned{background:var(--text3);color:var(--text2);cursor:default;}
+.price-tag{font-size:12px;color:var(--accent);font-weight:700;}
+.shop-note{font-size:9px;color:var(--text3);letter-spacing:0.08em;margin-top:6px;}
+
+/* ===== MODE SELECT ===== */
+.mode-card{background:var(--bg2);border:1px solid var(--text3);padding:24px;width:220px;cursor:pointer;text-align:center;transition:all 0.15s;}
+.mode-card:hover{border-color:var(--accent);}
+.mode-icon{font-size:28px;margin-bottom:12px;}
+.mode-name{font-size:13px;color:var(--accent);letter-spacing:0.1em;margin-bottom:8px;}
+.mode-desc{font-size:10px;color:var(--text2);line-height:1.6;}
+.mode-row{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;}
+
+/* ===== GAME SCREEN ===== */
+#game-screen{justify-content:flex-start;padding:48px 10px 10px;touch-action:none;}
+#game-top{display:flex;justify-content:space-between;align-items:center;gap:10px;width:100%;max-width:900px;margin-bottom:8px;}
+#game-title-sm{font-family:var(--font-display);font-size:14px;color:var(--accent);letter-spacing:0.2em;}
+#game-stats{display:flex;gap:16px;}
+.g-stat{text-align:center;}
+.g-stat-val{font-size:16px;font-weight:700;color:var(--text);}
+.g-stat-lbl{font-size:8px;letter-spacing:0.15em;color:var(--text3);}
+#arena{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;width:100%;max-width:900px;align-items:start;}
+#arena.solo{grid-template-columns:1fr;justify-items:center;}
+#arena.solo #npc-left,#arena.solo #npc-right{display:none;}
+#npc-left,#npc-right{display:flex;flex-direction:column;gap:5px;}
+.npc-panel{background:var(--npc-bg);border:1px solid var(--text3);padding:7px;position:relative;overflow:hidden;cursor:pointer;transition:border-color 0.2s;}
+.npc-panel:hover{border-color:var(--text2);}
+.npc-panel.targeted{border-color:var(--accent3);box-shadow:0 0 0 1px var(--accent3);}
+.npc-panel.targeted::after{content:'TARGET';position:absolute;bottom:3px;right:4px;font-size:7px;color:var(--accent3);letter-spacing:0.1em;}
+.npc-flash{position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity 0.08s;}
+.npc-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;}
+.npc-name{font-size:8px;letter-spacing:0.12em;color:var(--text2);}
+.npc-meta{display:flex;gap:6px;align-items:center;}
+.npc-score-sm{font-size:11px;color:var(--text2);font-weight:700;}
+.npc-skill-pip{width:5px;height:5px;border-radius:50%;display:inline-block;margin-left:1px;}
+.npc-bar-bg{height:2px;background:var(--bg3);margin-bottom:4px;}
+.npc-bar-fill{height:2px;transition:width 0.4s;background:var(--text3);}
+.npc-mini-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;}
+.npc-mini-cell{height:11px;background:var(--bg3);font-size:6px;display:flex;align-items:center;justify-content:center;color:var(--text3);font-family:var(--font-main);}
+#player-col{display:flex;flex-direction:column;align-items:center;}
+#board-container{position:relative;}
+#board{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;background:var(--bg3);border:1px solid var(--board-border);padding:5px;}
+.cell{width:clamp(58px,10vw,72px);height:clamp(58px,10vw,72px);display:flex;align-items:center;justify-content:center;font-weight:700;font-family:var(--font-main);transition:transform 0.08s;position:relative;overflow:hidden;font-size:clamp(14px,2vw,22px);}
+.cell-0{background:var(--bg3);border:1px solid var(--bg2);}
+.cell-2{background:var(--tile2-bg);color:var(--tile2-c);}
+.cell-4{background:var(--tile4-bg);color:var(--tile4-c);}
+.cell-8{background:var(--tile8-bg);color:var(--tile8-c);}
+.cell-16{background:var(--tile16-bg);color:var(--tile16-c);}
+.cell-32{background:var(--tile32-bg);color:var(--tile32-c);}
+.cell-64{background:var(--tile64-bg);color:var(--tile64-c);}
+.cell-128{background:var(--tile128-bg);color:var(--tile128-c);}
+.cell-256{background:var(--tile256-bg);color:var(--tile256-c);}
+.cell-512{background:var(--tile512-bg);color:var(--tile512-c);}
+.cell-1024{background:var(--tile1024-bg);color:var(--tile1024-c);font-size:clamp(11px,1.6vw,16px);}
+.cell-2048{background:var(--tile2048-bg);color:var(--tile2048-c);font-size:clamp(11px,1.6vw,16px);}
+.cell.pop{animation:pop 0.13s ease;}
+#board-container.glitch-anim{animation:glitch-a 0.18s steps(3);}
+#board-container.shake{animation:shake-a 0.25s ease;}
+@keyframes pop{0%{transform:scale(1.2);}100%{transform:scale(1);}}
+@keyframes glitch-a{0%{transform:translateX(-4px) skewX(-3deg);opacity:0.7;}33%{transform:translateX(4px) skewX(3deg);}66%{transform:translateX(-2px);}100%{transform:none;opacity:1;}}
+@keyframes shake-a{0%{transform:translateX(0);}20%{transform:translateX(-5px);}40%{transform:translateX(5px);}60%{transform:translateX(-3px);}80%{transform:translateX(3px);}100%{transform:translateX(0);}}
+#attack-border{position:absolute;inset:0;border:2px solid transparent;pointer-events:none;z-index:10;transition:opacity 0.1s;}
+#attack-border.hit{border-color:var(--accent3);animation:border-flash 0.5s steps(2) 2;}
+@keyframes border-flash{0%{opacity:1;}50%{opacity:0.2;}100%{opacity:1;}}
+#scanlines{position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,0.12) 3px,rgba(0,0,0,0.12) 4px);z-index:5;}
+#player-hud{margin-top:8px;width:100%;}
+#combo-txt{font-size:11px;color:var(--accent);letter-spacing:0.12em;min-height:14px;text-align:center;font-family:var(--font-display);}
+#status-txt{font-size:9px;color:var(--text2);letter-spacing:0.1em;text-align:center;min-height:12px;margin-top:3px;}
+.meter-wrap{display:flex;gap:6px;align-items:center;margin-top:6px;}
+.m-lbl{font-size:7px;color:var(--text2);letter-spacing:0.08em;width:28px;}
+.m-bg{flex:1;height:4px;background:var(--bg3);}
+.m-fill{height:4px;transition:width 0.25s;}
+#atk-fill{background:var(--accent3);}
+#dfn-fill{background:#4488ff;}
+#target-info{font-size:8px;color:var(--accent3);letter-spacing:0.1em;text-align:center;min-height:12px;margin-top:3px;}
+#game-btns{display:flex;gap:8px;margin-top:10px;justify-content:center;}
+.g-btn{background:var(--bg2);border:1px solid var(--text3);color:var(--text2);font-family:var(--font-main);font-size:9px;padding:6px 12px;cursor:pointer;letter-spacing:0.1em;}
+.g-btn:hover{border-color:var(--accent);color:var(--accent);}
+#crown-display{font-size:9px;color:var(--accent);letter-spacing:0.1em;text-align:center;min-height:12px;}
+#player-name-crown{display:flex;align-items:center;gap:6px;justify-content:center;margin-bottom:4px;}
+#p-crown{font-size:13px;color:var(--accent);}
+#p-label{font-size:9px;color:var(--text2);letter-spacing:0.12em;}
+
+/* ===== MOBILE ===== */
+@media (max-width:680px){
+  #game-screen{padding:44px 8px 8px;}
+  #game-top{flex-wrap:wrap;justify-content:center;}
+  #game-title-sm{display:none;}
+  #game-stats{gap:12px;}
+  #arena{grid-template-columns:1fr;gap:6px;}
+  #npc-left,#npc-right{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;}
+  #npc-left{order:1;} #player-col{order:2;} #npc-right{order:3;}
+  .npc-panel{padding:4px;}
+  .npc-mini-cell{height:7px;font-size:0;}
+  .npc-skill-pip{display:none;}
+  .cell{width:min(19vw,76px);height:min(19vw,76px);font-size:min(5.5vw,22px);}
+  .cell-1024,.cell-2048{font-size:min(4vw,16px);}
+}
+
+/* ===== TOAST ===== */
+#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--bg2);border:1px solid var(--accent);color:var(--accent);font-size:11px;padding:10px 20px;letter-spacing:0.1em;z-index:999;opacity:0;transition:opacity 0.3s;pointer-events:none;}
+</style>
+</head>
+<body>
+<canvas id="particles"></canvas>
+<div id="toast"></div>
+<a id="backlink" href="https://sidmastaflex.com/software.html">← Sidmastaflex Software</a>
+
+<!-- HOME SCREEN -->
+<div id="home-screen" class="screen active">
+  <div id="game-logo">GRID<span>WAR</span></div>
+  <div id="tagline">// MERGE · ATTACK · SURVIVE //</div>
+  <div id="home-btns">
+    <button class="home-btn primary" onclick="showScreen('mode-screen')">PLAY</button>
+    <button class="home-btn" onclick="showScreen('settings-screen')">SETTINGS</button>
+    <button class="home-btn" onclick="showScreen('shop-screen')">SHOP</button>
+  </div>
+  <div style="font-size:9px;color:var(--text2);letter-spacing:0.1em;text-align:center;margin-top:8px;line-height:1.8;">Arrow keys / WASD or swipe to play<br>Click or tap an opponent to target them</div>
+</div>
+
+<!-- MODE SELECT -->
+<div id="mode-screen" class="screen">
+  <div style="font-family:var(--font-display);font-size:14px;color:var(--accent);letter-spacing:0.2em;margin-bottom:20px;">SELECT MODE</div>
+  <div class="mode-row">
+    <div class="mode-card" onclick="startGame('battle')">
+      <div class="mode-icon">⚔</div>
+      <div class="mode-name">BATTLE</div>
+      <div class="mode-desc">You vs 6 NPC opponents. Attack, defend, and survive. Last player standing wins.</div>
+    </div>
+    <div class="mode-card" onclick="startGame('solo')">
+      <div class="mode-icon">◈</div>
+      <div class="mode-name">SOLO</div>
+      <div class="mode-desc">Classic 2048. No opponents. Just you and the grid. Pure score attack.</div>
+    </div>
+  </div>
+  <button class="back-btn" style="margin-top:24px;" onclick="showScreen('home-screen')">BACK</button>
+</div>
+
+<!-- SETTINGS SCREEN -->
+<div id="settings-screen" class="screen">
+  <div class="panel" style="max-width:500px;">
+    <div class="panel-title">SETTINGS</div>
+
+    <div class="setting-row">
+      <span class="setting-lbl">Master Volume</span>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <input type="range" min="0" max="100" value="70" id="vol-slider" oninput="settings.volume=this.value/100;document.getElementById('vol-val').textContent=this.value"/>
+        <span class="setting-val" id="vol-val">70</span>
+      </div>
+    </div>
+
+    <div class="setting-row">
+      <span class="setting-lbl">Sound Pack</span>
+      <div class="toggle-group" id="snd-pack-btns">
+        <button class="tog-btn active" onclick="setSoundPack('acid',this)">ACID</button>
+        <button class="tog-btn" onclick="setSoundPack('riddim',this)">RIDDIM</button>
+        <button class="tog-btn" onclick="setSoundPack('pipeman',this)">PIPEMAN</button>
+        <button class="tog-btn" id="fastguy-sound-btn" onclick="setSoundPack('fastguy',this)" style="display:none;">FASTGUY</button>
+      </div>
+    </div>
+
+    <div class="setting-row">
+      <span class="setting-lbl">Visual Theme</span>
+      <div class="toggle-group" id="vis-pack-btns">
+        <button class="tog-btn active" onclick="setVisualTheme('acid',this)">ACID</button>
+        <button class="tog-btn" onclick="setVisualTheme('riddim',this)">RIDDIM</button>
+        <button class="tog-btn" onclick="setVisualTheme('pipeman',this)">PIPEMAN</button>
+        <button class="tog-btn" id="fastguy-theme-btn" onclick="setVisualTheme('fastguy',this)" style="display:none;">FASTGUY</button>
+      </div>
+    </div>
+
+    <div class="setting-row">
+      <span class="setting-lbl">Animations</span>
+      <div class="toggle-group">
+        <button class="tog-btn active" id="anim-on-btn" onclick="setAnimations(true)">ON</button>
+        <button class="tog-btn" id="anim-off-btn" onclick="setAnimations(false)">OFF</button>
+      </div>
+    </div>
+
+    <div class="setting-row">
+      <span class="setting-lbl">Particles</span>
+      <div class="toggle-group">
+        <button class="tog-btn active" id="part-on-btn" onclick="setParticles(true)">ON</button>
+        <button class="tog-btn" id="part-off-btn" onclick="setParticles(false)">OFF</button>
+      </div>
+    </div>
+  </div>
+  <button class="back-btn" id="settings-back" onclick="showScreen(settingsReturn)">BACK</button>
+</div>
+
+<!-- SHOP SCREEN -->
+<div id="shop-screen" class="screen">
+  <div class="panel" style="max-width:500px;">
+    <div class="panel-title">SHOP</div>
+    <div class="shop-item">
+      <div class="shop-item-info">
+        <div class="item-name">ACID PACK</div>
+        <div class="item-desc">Glitch monochrome visuals · Acid bass sounds</div>
+      </div>
+      <button class="buy-btn owned">OWNED</button>
+    </div>
+    <div class="shop-item">
+      <div class="shop-item-info">
+        <div class="item-name">RIDDIM PACK</div>
+        <div class="item-desc">Deep purple/crimson visuals · Heavy bass drops</div>
+      </div>
+      <button class="buy-btn owned">OWNED</button>
+    </div>
+    <div class="shop-item">
+      <div class="shop-item-info">
+        <div class="item-name">PIPEMAN PACK</div>
+        <div class="item-desc">Bright retro pixel visuals · 8-bit chiptune sounds</div>
+      </div>
+      <button class="buy-btn owned">OWNED</button>
+    </div>
+    <div class="shop-item locked-item" id="fastguy-shop-item">
+      <div class="shop-item-info">
+        <div class="item-name" id="fastguy-name">FASTGUY PACK 🔒</div>
+        <div class="item-desc">Blue speed visuals · Sparkly high-pitched chime on every merge</div>
+        <div class="price-tag" style="margin-top:6px;">$2.99</div>
+      </div>
+      <button class="buy-btn" id="fastguy-buy-btn" onclick="purchaseFastguy()">BUY</button>
+    </div>
+    <div class="shop-note">DEMO STORE · purchases are simulated, no payment is taken</div>
+  </div>
+  <button class="back-btn" onclick="showScreen('home-screen')">BACK</button>
+</div>
+
+<!-- GAME SCREEN -->
+<div id="game-screen" class="screen">
+  <div id="game-top">
+    <div id="game-title-sm">GRID WAR</div>
+    <div id="game-stats">
+      <div class="g-stat"><div class="g-stat-val" id="score-display">0</div><div class="g-stat-lbl">SCORE</div></div>
+      <div class="g-stat"><div class="g-stat-val" id="best-display">0</div><div class="g-stat-lbl">BEST</div></div>
+      <div class="g-stat"><div class="g-stat-val" id="rank-display">1</div><div class="g-stat-lbl">RANK</div></div>
+      <div class="g-stat"><div class="g-stat-val" id="wins-display">0</div><div class="g-stat-lbl">WINS</div></div>
+    </div>
+    <button class="g-btn" onclick="leaveGame()">MENU</button>
+  </div>
+
+  <div id="arena">
+    <div id="npc-left"></div>
+    <div id="player-col">
+      <div id="player-name-crown">
+        <span id="p-crown"></span>
+        <span id="p-label">YOU</span>
+      </div>
+      <div id="board-container">
+        <div id="board"></div>
+        <div id="attack-border"></div>
+        <div id="scanlines"></div>
+      </div>
+      <div id="player-hud">
+        <div id="crown-display"></div>
+        <div id="combo-txt"></div>
+        <div id="status-txt">// GRID WAR — arrow keys or wasd //</div>
+        <div id="target-info"></div>
+        <div class="meter-wrap">
+          <span class="m-lbl">ATK</span>
+          <div class="m-bg"><div class="m-fill" id="atk-fill" style="width:0%"></div></div>
+          <span class="m-lbl" style="text-align:right">DEF</span>
+          <div class="m-bg"><div class="m-fill" id="dfn-fill" style="width:30%"></div></div>
+        </div>
+        <div id="game-btns">
+          <button class="g-btn" onclick="initGame()">NEW GAME</button>
+          <button class="g-btn" onclick="openSettingsFromGame()">SETTINGS</button>
+        </div>
+      </div>
+    </div>
+    <div id="npc-right"></div>
+  </div>
+</div>
+
+<script>
+const settings={volume:0.7,soundPack:'acid',visualTheme:'acid',animations:true,particles:true};
+let fastguyOwned=false;
+let winStreak=0, totalWins=0, best=0;
+let board,score,combo,atkMeter,dfnMeter,gameOver,npcs=[],npcInterval,isSolo,targetNpcIdx=0;
+let audioCtx, settingsReturn='home-screen';
+
+/* ===== PARTICLES ===== */
+const pCanvas=document.getElementById('particles');
+const pCtx=pCanvas.getContext('2d');
+let pList=[];
+function resizeCanvas(){pCanvas.width=window.innerWidth;pCanvas.height=window.innerHeight;}
+resizeCanvas();
+window.addEventListener('resize',resizeCanvas);
+
+function spawnParticles(x,y,count,color){
+  if(!settings.particles) return;
+  for(let i=0;i<count;i++){
+    const angle=Math.random()*Math.PI*2;
+    const speed=1+Math.random()*4;
+    pList.push({x,y,vx:Math.cos(angle)*speed,vy:Math.sin(angle)*speed,life:1,color,size:2+Math.random()*3});
+  }
+}
+function spawnBurstAt(el,count=12){
+  if(!el||!settings.particles) return;
+  const r=el.getBoundingClientRect();
+  const color=getComputedStyle(document.body).getPropertyValue('--particle-color').trim()||'#a0ff80';
+  spawnParticles(r.left+r.width/2,r.top+r.height/2,count,color);
+}
+function animParticles(){
+  pCtx.clearRect(0,0,pCanvas.width,pCanvas.height);
+  pList=pList.filter(p=>p.life>0);
+  pList.forEach(p=>{
+    p.x+=p.vx; p.y+=p.vy; p.vy+=0.12; p.life-=0.025;
+    pCtx.globalAlpha=Math.max(0,p.life);
+    pCtx.fillStyle=p.color;
+    pCtx.fillRect(p.x-p.size/2,p.y-p.size/2,p.size,p.size);
+  });
+  pCtx.globalAlpha=1;
+  requestAnimationFrame(animParticles);
+}
+animParticles();
+
+/* ===== SCREEN NAV ===== */
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+function openSettingsFromGame(){settingsReturn='game-screen';showScreen('settings-screen');}
+function leaveGame(){clearInterval(npcInterval);settingsReturn='home-screen';showScreen('home-screen');}
+document.querySelectorAll('[onclick*="settings-screen"]').forEach(b=>b.addEventListener('click',()=>{settingsReturn='home-screen';}));
+
+/* ===== THEME ===== */
+function setVisualTheme(t,btn){
+  const themeMap={acid:'',riddim:'theme-riddim',pipeman:'theme-pipeman',fastguy:'theme-fastguy'};
+  document.body.className=themeMap[t]||'';
+  settings.visualTheme=t;
+  document.querySelectorAll('#vis-pack-btns .tog-btn').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+}
+function setSoundPack(p,btn){
+  settings.soundPack=p;
+  document.querySelectorAll('#snd-pack-btns .tog-btn').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  snd('merge',16);
+}
+function setAnimations(on){
+  settings.animations=on;
+  document.getElementById('anim-on-btn').classList.toggle('active',on);
+  document.getElementById('anim-off-btn').classList.toggle('active',!on);
+}
+function setParticles(on){
+  settings.particles=on;
+  document.getElementById('part-on-btn').classList.toggle('active',on);
+  document.getElementById('part-off-btn').classList.toggle('active',!on);
+}
+
+/* ===== SHOP (simulated purchase, no payment) ===== */
+function purchaseFastguy(){
+  if(fastguyOwned) return;
+  const modal=document.createElement('div');
+  modal.id='buy-modal';
+  modal.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:500;display:flex;align-items:center;justify-content:center;padding:16px;';
+  modal.innerHTML=`<div style="background:var(--bg2);border:1px solid var(--accent);padding:28px;max-width:340px;text-align:center;font-family:var(--font-main);">
+    <div style="font-size:13px;color:var(--accent);letter-spacing:0.15em;margin-bottom:12px;">FASTGUY PACK</div>
+    <div style="font-size:11px;color:var(--text2);line-height:1.8;margin-bottom:16px;">Blue speed theme · Chime on every merge<br>Bright high-energy palette</div>
+    <div style="font-size:18px;color:var(--accent);margin-bottom:8px;font-weight:700;">$2.99</div>
+    <div style="font-size:9px;color:var(--text2);margin-bottom:18px;letter-spacing:0.08em;">DEMO ONLY · no real payment is taken</div>
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+      <button onclick="confirmPurchase();document.getElementById('buy-modal').remove();" style="background:var(--accent);color:#000;font-family:var(--font-main);font-size:11px;padding:10px 16px;border:none;cursor:pointer;letter-spacing:0.1em;font-weight:700;">CONFIRM (DEMO)</button>
+      <button onclick="document.getElementById('buy-modal').remove();" style="background:var(--bg3);color:var(--text2);font-family:var(--font-main);font-size:11px;padding:10px 16px;border:1px solid var(--text3);cursor:pointer;">CANCEL</button>
+    </div>
+  </div>`;
+  document.body.appendChild(modal);
+}
+function confirmPurchase(){
+  fastguyOwned=true;
+  const b=document.getElementById('fastguy-buy-btn');
+  b.textContent='OWNED'; b.className='buy-btn owned'; b.onclick=null;
+  document.getElementById('fastguy-shop-item').classList.remove('locked-item');
+  document.getElementById('fastguy-name').textContent='FASTGUY PACK';
+  document.getElementById('fastguy-theme-btn').style.display='';
+  document.getElementById('fastguy-sound-btn').style.display='';
+  showToast('FASTGUY PACK UNLOCKED!');
+}
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.style.opacity=1;
+  clearTimeout(t._h); t._h=setTimeout(()=>t.style.opacity=0,2500);
+}
+
+/* ===== AUDIO (all synthesized with Web Audio) ===== */
+function getAC(){if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();if(audioCtx.state==='suspended')audioCtx.resume();return audioCtx;}
+
+function playNote(freq,type,dur,vol=0.15,detune=0,delay=0){
+  if(settings.volume===0) return;
+  try{
+    const ac=getAC(); const t=ac.currentTime+delay;
+    const o=ac.createOscillator(); const g=ac.createGain();
+    o.connect(g); g.connect(ac.destination);
+    o.type=type; o.frequency.setValueAtTime(freq,t);
+    if(detune) o.detune.setValueAtTime(detune,t);
+    const v=vol*settings.volume;
+    g.gain.setValueAtTime(v,t);
+    g.gain.exponentialRampToValueAtTime(0.001,t+dur);
+    o.start(t); o.stop(t+dur);
+  }catch(e){}
+}
+
+const SOUNDS={
+  acid:{
+    merge:(val)=>{
+      const freqMap={2:110,4:130,8:165,16:220,32:277,64:330,128:440,256:554,512:660,1024:880,2048:1100};
+      const f=freqMap[val]||440;
+      playNote(f,'sawtooth',0.18,0.14);
+      playNote(f*1.5,'square',0.1,0.06,-20,0.04);
+    },
+    move:()=>playNote(80,'sine',0.05,0.05),
+    attack:()=>{playNote(55,'sawtooth',0.3,0.18);playNote(40,'square',0.2,0.12,0,0.08);},
+    receive:()=>{playNote(45,'sawtooth',0.25,0.18,-30);playNote(35,'square',0.3,0.1,0,0.06);},
+    combo:(n)=>{for(let i=0;i<Math.min(n,5);i++) playNote(220+i*110,'sawtooth',0.12,0.09,0,i*0.06);}
+  },
+  riddim:{
+    merge:(val)=>{
+      const f=55*Math.pow(1.15,Math.log2(val));
+      playNote(f,'sawtooth',0.25,0.2);
+      playNote(f*0.5,'square',0.3,0.12,0,0.05);
+    },
+    move:()=>playNote(60,'sawtooth',0.06,0.06),
+    attack:()=>{playNote(40,'sawtooth',0.4,0.22);playNote(30,'square',0.35,0.15,0,0.1);},
+    receive:()=>{playNote(35,'sawtooth',0.35,0.2);playNote(25,'square',0.4,0.12,0,0.08);},
+    combo:(n)=>{for(let i=0;i<Math.min(n,5);i++) playNote(80+i*40,'sawtooth',0.15,0.12,0,i*0.07);}
+  },
+  pipeman:{
+    merge:(val)=>{
+      const notes=[261,294,330,349,392,440,494,523,587,659,698,784];
+      const idx=Math.min(Math.log2(val),notes.length-1);
+      playNote(notes[Math.floor(idx)],'square',0.15,0.15);
+      if(val>=8) playNote(notes[Math.floor(idx)]*2,'square',0.1,0.08,0,0.05);
+    },
+    move:()=>playNote(392,'square',0.06,0.08),
+    attack:()=>{playNote(130,'sawtooth',0.2,0.15);playNote(196,'square',0.15,0.1,0,0.06);},
+    receive:()=>{playNote(174,'square',0.2,0.15);playNote(130,'sawtooth',0.25,0.1,0,0.05);},
+    combo:(n)=>{const scale=[523,587,659,698,784];for(let i=0;i<Math.min(n,5);i++) playNote(scale[i],'square',0.12,0.1,0,i*0.08);}
+  },
+  fastguy:{
+    merge:(val)=>{
+      playNote(1480,'sine',0.08,0.18);
+      playNote(1864,'sine',0.06,0.12,0,0.04);
+      playNote(2217,'sine',0.04,0.08,0,0.08);
+    },
+    move:()=>playNote(880,'sine',0.04,0.06),
+    attack:()=>{playNote(196,'sawtooth',0.3,0.18);playNote(147,'square',0.25,0.12,0,0.08);},
+    receive:()=>{playNote(233,'sawtooth',0.25,0.16);playNote(185,'square',0.3,0.1,0,0.06);},
+    combo:(n)=>{const f=[1318,1568,1760,2093,2349];for(let i=0;i<Math.min(n,5);i++) playNote(f[i],'sine',0.1,0.1,0,i*0.06);}
+  }
+};
+
+function snd(type,...args){
+  const pack=SOUNDS[settings.soundPack]||SOUNDS.acid;
+  if(pack[type]) pack[type](...args);
+}
+
+/* ===== GAME LOGIC ===== */
+function newBoard(){return Array(16).fill(0);}
+function addRandom(b){
+  const e=b.reduce((a,v,i)=>v===0?[...a,i]:a,[]);
+  if(!e.length) return;
+  b[e[Math.floor(Math.random()*e.length)]]=Math.random()<0.85?2:4;
+}
+function slideRow(row,merged){
+  let r=row.filter(x=>x),pts=0,merges=0;
+  for(let i=0;i<r.length-1;i++){
+    if(r[i]===r[i+1]){r[i]*=2;pts+=r[i];r.splice(i+1,1);merges++;if(merged) merged.push(r[i]);}
+  }
+  while(r.length<4) r.push(0);
+  return{row:r,pts,merges};
+}
+// doMove is pure: it never plays sounds, so NPC moves and move-checks stay silent
+function doMove(b,dir){
+  let nb=[...b],pts=0,moved=false,merges=0;const merged=[];
+  const rows=[[0,1,2,3],[4,5,6,7],[8,9,10,11],[12,13,14,15]];
+  const cols=[[0,4,8,12],[1,5,9,13],[2,6,10,14],[3,7,11,15]];
+  const lines=dir==='left'||dir==='right'?rows:cols;
+  lines.forEach(line=>{
+    let vals=line.map(i=>nb[i]);
+    if(dir==='right'||dir==='down') vals.reverse();
+    const res=slideRow(vals,merged);
+    if(dir==='right'||dir==='down') res.row.reverse();
+    line.forEach((idx,i)=>{if(nb[idx]!==res.row[i]) moved=true; nb[idx]=res.row[i];});
+    pts+=res.pts; merges+=res.merges;
+  });
+  return{board:nb,pts,moved,merges,merged};
+}
+function canMove(b){
+  return['left','right','up','down'].some(d=>doMove(b,d).moved);
+}
+
+/* ===== NPC SYSTEM ===== */
+const NPC_DEFS=[
+  {name:'VOLT',skill:0.9,color:'#8060ff'},
+  {name:'ECHO',skill:0.75,color:'#40d0ff'},
+  {name:'SHADE',skill:0.5,color:'#ff6060'},
+  {name:'RELIC',skill:0.35,color:'#ffb040'},
+  {name:'NEON',skill:0.6,color:'#a0ff80'},
+  {name:'GLITCH',skill:0.2,color:'#808080'}
+];
+const npcStreaks=NPC_DEFS.map(()=>0);
+
+function initNPCs(){
+  npcs=[];
+  document.getElementById('npc-left').innerHTML='';
+  document.getElementById('npc-right').innerHTML='';
+  NPC_DEFS.forEach((def,i)=>{
+    const b=newBoard(); addRandom(b); addRandom(b);
+    const npc={...def,board:b,score:0,streak:npcStreaks[i],eliminated:false,el:null};
+    const panel=document.createElement('div');
+    panel.className='npc-panel'+(i===targetNpcIdx?' targeted':'');
+    panel.dataset.idx=i;
+    panel.onclick=()=>setTarget(i);
+    const pips=Array(3).fill(0).map((_,p)=>`<span class="npc-skill-pip" style="background:${p<Math.ceil(def.skill*3)?def.color:'#222'}"></span>`).join('');
+    panel.innerHTML=`
+      <div class="npc-flash" id="nf${i}"></div>
+      <div class="npc-header">
+        <div style="display:flex;align-items:center;gap:5px;">
+          <span class="npc-name">${def.name}</span>
+          <span id="npc-crown-${i}" style="font-size:9px"></span>
+        </div>
+        <div class="npc-meta">
+          <span style="font-size:8px;color:${def.color};">${pips}</span>
+          <span class="npc-score-sm" id="ns${i}">0</span>
+        </div>
+      </div>
+      <div class="npc-bar-bg"><div class="npc-bar-fill" id="nb${i}" style="width:0%;background:${def.color}"></div></div>
+      <div class="npc-mini-grid" id="ng${i}"></div>
+    `;
+    npc.el=panel;
+    if(i<3) document.getElementById('npc-left').appendChild(panel);
+    else document.getElementById('npc-right').appendChild(panel);
+    npcs.push(npc);
+    renderNPCGrid(npc,i);
+  });
+  updateNPCCrowns();
+}
+
+function setTarget(idx){
+  if(!npcs[idx]||npcs[idx].eliminated) return;
+  targetNpcIdx=idx;
+  document.querySelectorAll('.npc-panel').forEach(p=>{
+    p.classList.toggle('targeted',+p.dataset.idx===idx);
+  });
+  document.getElementById('target-info').textContent=`TARGET: ${npcs[idx].name}`;
+}
+
+function renderNPCGrid(npc,i){
+  const g=document.getElementById(`ng${i}`);
+  if(!g) return;
+  g.innerHTML='';
+  npc.board.forEach(v=>{
+    const c=document.createElement('div');
+    c.className='npc-mini-cell';
+    if(v>0){
+      c.textContent=v>=512?'..':''+v;
+      c.style.background=v>=128?'#3a2400':v>=32?'#123a12':'#16163a';
+      c.style.color=v>=128?'#c09040':v>=32?'#50a050':'#6060a0';
+    }
+    g.appendChild(c);
+  });
+}
+
+function npcTick(){
+  if(gameOver||isSolo) return;
+  npcs.forEach((npc,i)=>{
+    if(npc.eliminated) return;
+    if(Math.random()>npc.skill*0.45+0.15) return;
+    const dirs=['left','right','up','down'];
+    let bestDir=null,bestPts=-1;
+    if(npc.skill>0.6){
+      dirs.forEach(d=>{const r=doMove(npc.board,d);if(r.moved&&r.pts>bestPts){bestPts=r.pts;bestDir=d;}});
+    } else {
+      const legal=dirs.filter(d=>doMove(npc.board,d).moved);
+      bestDir=legal.length?legal[Math.floor(Math.random()*legal.length)]:null;
+    }
+    if(!bestDir){eliminateNPC(i);return;}
+    const res=doMove(npc.board,bestDir);
+    if(!res.moved) return;
+    npc.board=res.board; npc.score+=res.pts;
+    addRandom(npc.board);
+    document.getElementById(`ns${i}`).textContent=npc.score;
+    const pct=Math.min(100,npc.score/1000*100);
+    document.getElementById(`nb${i}`).style.width=pct+'%';
+    renderNPCGrid(npc,i);
+    if(!canMove(npc.board)){eliminateNPC(i);return;}
+    if(res.merges>0&&Math.random()<npc.skill*0.35) sendNPCAttack(i);
+  });
+  updateRank();
+  checkWin();
+}
+
+function eliminateNPC(i){
+  if(npcs[i].eliminated) return;
+  npcs[i].eliminated=true;
+  npcs[i].el.style.opacity='0.3';
+  npcs[i].el.style.pointerEvents='none';
+  npcStreaks[i]=0;
+  setStatus(`${npcs[i].name} ELIMINATED`);
+  if(targetNpcIdx===i){
+    const alive=npcs.findIndex(n=>!n.eliminated);
+    if(alive>=0) setTarget(alive);
+  }
+}
+
+function sendNPCAttack(npcIdx){
+  if(gameOver) return;
+  if(dfnMeter>65){dfnMeter=Math.max(0,dfnMeter-50);updateMeters();setStatus('BLOCKED by defense shield');return;}
+  const empties=board.reduce((a,v,i)=>v===0?[...a,i]:a,[]);
+  if(empties.length<3) return;
+  const blocksToAdd=Math.floor(Math.random()*2)+1;
+  for(let b=0;b<blocksToAdd&&empties.length;b++){
+    const idx=empties.splice(Math.floor(Math.random()*empties.length),1)[0];
+    board[idx]=2;
+  }
+  const border=document.getElementById('attack-border');
+  border.classList.add('hit');
+  setTimeout(()=>border.classList.remove('hit'),700);
+  const flash=document.getElementById(`nf${npcIdx}`);
+  if(flash){flash.style.background='#ff003333';flash.style.opacity=1;setTimeout(()=>{flash.style.opacity=0;},180);}
+  snd('receive');
+  setStatus(`ATTACKED by ${npcs[npcIdx].name} — +${blocksToAdd} garbage`);
+  const bc=document.getElementById('board-container');
+  if(settings.animations){bc.classList.add('shake');setTimeout(()=>bc.classList.remove('shake'),260);}
+  renderBoard();
+  if(!canMove(board)) endGame(false);
+}
+
+function firePlayerAttack(){
+  if(gameOver||isSolo) return;
+  let target=npcs[targetNpcIdx];
+  if(!target||target.eliminated){
+    const alive=npcs.findIndex(n=>!n.eliminated);
+    if(alive<0) return;
+    setTarget(alive); target=npcs[alive];
+  }
+  const idx=npcs.indexOf(target);
+  const damage=Math.floor(atkMeter/10)+combo;
+  target.score=Math.max(0,target.score-damage*15);
+  // garbage tiles land on the target's board too
+  const empties=target.board.reduce((a,v,i)=>v===0?[...a,i]:a,[]);
+  for(let k=0;k<2&&empties.length;k++){target.board[empties.splice(Math.floor(Math.random()*empties.length),1)[0]]=2;}
+  renderNPCGrid(target,idx);
+  document.getElementById(`ns${idx}`).textContent=target.score;
+  const flash=document.getElementById(`nf${idx}`);
+  if(flash){flash.style.background='rgba(255,0,51,0.3)';flash.style.opacity=1;setTimeout(()=>flash.style.opacity=0,200);}
+  const targetGrid=document.getElementById(`ng${idx}`);
+  if(targetGrid&&settings.animations){targetGrid.style.transform='translateX(-4px)';setTimeout(()=>targetGrid.style.transform='',150);}
+  spawnBurstAt(target.el,16);
+  snd('attack');
+  setStatus(`ATTACKED ${target.name} — ${damage*15} dmg`);
+  atkMeter=0; updateMeters();
+  if(!canMove(target.board)) eliminateNPC(idx);
+  checkWin();
+}
+
+/* ===== PLAYER MOVE ===== */
+function playerMove(dir){
+  if(gameOver) return;
+  const res=doMove(board,dir);
+  if(!res.moved) return;
+  if(res.merged.length) res.merged.forEach((v,k)=>{if(k<3) snd('merge',v);}); else snd('move');
+  board=res.board;
+  score+=res.pts;
+  if(score>best){best=score;document.getElementById('best-display').textContent=best;}
+  document.getElementById('score-display').textContent=score;
+
+  if(res.merges>0){
+    combo++;
+    atkMeter=Math.min(100,atkMeter+res.pts/6);
+    dfnMeter=Math.min(100,dfnMeter+4);
+    if(combo>=3) snd('combo',combo);
+    document.getElementById('combo-txt').textContent=combo>=2?`COMBO x${combo}`:'';
+    if(atkMeter>=100&&!isSolo) firePlayerAttack();
+    const boardEl=document.getElementById('board-container');
+    if(res.merges>=2&&settings.animations){
+      boardEl.classList.add('glitch-anim');
+      setTimeout(()=>boardEl.classList.remove('glitch-anim'),200);
+    }
+    spawnBurstAt(boardEl,res.merges*6);
+  } else {
+    combo=0;
+    dfnMeter=Math.max(0,dfnMeter-1);
+    document.getElementById('combo-txt').textContent='';
+  }
+  updateMeters();
+  addRandom(board);
+  renderBoard(res.merges>0);
+
+  if(!canMove(board)){
+    endGame(false);
+    return;
+  }
+  if(!isSolo){updateRank();checkWin();}
+}
+
+function checkWin(){
+  if(gameOver||isSolo) return;
+  const alive=npcs.filter(n=>!n.eliminated);
+  if(alive.length===0) endGame(true);
+}
+
+function endGame(won){
+  if(gameOver) return;
+  gameOver=true;
+  clearInterval(npcInterval);
+  if(won){
+    winStreak++;
+    totalWins++;
+    document.getElementById('wins-display').textContent=totalWins;
+    updateCrownDisplay();
+    showToast('VICTORY! STREAK: '+winStreak);
+    setStatus(`VICTORY — streak: ${winStreak} — score: ${score}`);
+    document.getElementById('combo-txt').textContent='WINNER!';
+  } else {
+    winStreak=0;
+    if(!isSolo){
+      // the highest-scoring surviving NPC takes the win
+      const alive=npcs.filter(n=>!n.eliminated).sort((a,b)=>b.score-a.score);
+      if(alive[0]){const i=npcs.indexOf(alive[0]);npcStreaks[i]++;}
+      updateNPCCrowns();
+    }
+    updateCrownDisplay();
+    setStatus(isSolo?`GAME OVER — score: ${score}`:`ELIMINATED — final rank: #${document.getElementById('rank-display').textContent} — score: ${score}`);
+    document.getElementById('combo-txt').textContent='GAME OVER';
+  }
+}
+
+function updateCrownDisplay(){
+  const pCrown=document.getElementById('p-crown');
+  const crown=document.getElementById('crown-display');
+  if(winStreak>=3){
+    pCrown.textContent='♛';
+    crown.textContent=`WIN STREAK: ${winStreak}`;
+  } else if(winStreak>0){
+    pCrown.textContent='★';
+    crown.textContent=`STREAK: ${winStreak}`;
+  } else {
+    pCrown.textContent='';
+    crown.textContent='';
+  }
+}
+
+function updateNPCCrowns(){
+  npcs.forEach((npc,i)=>{
+    const el=document.getElementById(`npc-crown-${i}`);
+    if(!el) return;
+    const s=npcStreaks[i];
+    el.textContent=s>=3?'♛':s>0?'★':'';
+    el.style.color=npc.color;
+  });
+}
+
+function updateRank(){
+  const all=[{score,name:'YOU'},...npcs.filter(n=>!n.eliminated).map(n=>({score:n.score,name:n.name}))].sort((a,b)=>b.score-a.score);
+  const r=all.findIndex(x=>x.name==='YOU')+1;
+  const rEl=document.getElementById('rank-display');
+  rEl.textContent=r;
+  rEl.style.color=r===1?'var(--accent)':r<=3?'#ffb040':'var(--text)';
+}
+
+function updateMeters(){
+  document.getElementById('atk-fill').style.width=Math.min(100,atkMeter)+'%';
+  document.getElementById('dfn-fill').style.width=Math.min(100,dfnMeter)+'%';
+}
+
+function setStatus(msg){document.getElementById('status-txt').textContent=msg;}
+
+/* ===== RENDER ===== */
+function renderBoard(pop){
+  const el=document.getElementById('board');
+  el.innerHTML='';
+  board.forEach(v=>{
+    const c=document.createElement('div');
+    const cls=Math.min(v,2048);
+    c.className=`cell cell-${cls}`+(pop&&v>0&&settings.animations?' pop':'');
+    if(v>0) c.textContent=v;
+    el.appendChild(c);
+  });
+}
+
+/* ===== INIT GAME ===== */
+function startGame(mode){
+  isSolo=mode==='solo';
+  showScreen('game-screen');
+  initGame();
+}
+
+function initGame(){
+  board=newBoard(); score=0; combo=0; atkMeter=0; dfnMeter=30; gameOver=false; targetNpcIdx=0;
+  addRandom(board); addRandom(board);
+  document.getElementById('score-display').textContent=0;
+  document.getElementById('rank-display').textContent=1;
+  document.getElementById('combo-txt').textContent='';
+  document.getElementById('arena').classList.toggle('solo',isSolo);
+  document.getElementById('target-info').textContent=isSolo?'SOLO MODE':'TARGET: '+NPC_DEFS[0].name;
+  setStatus(isSolo?'// SOLO MODE — arrow keys, wasd or swipe //':'// arrow keys, wasd or swipe — tap an opponent to target //');
+  updateMeters();
+  updateCrownDisplay();
+  renderBoard();
+  clearInterval(npcInterval);
+  if(!isSolo){
+    initNPCs();
+    npcInterval=setInterval(npcTick,1600);
+  }
+}
+
+/* ===== KEYBOARD ===== */
+document.addEventListener('keydown',e=>{
+  const map={ArrowLeft:'left',ArrowRight:'right',ArrowUp:'up',ArrowDown:'down',a:'left',d:'right',w:'up',s:'down',A:'left',D:'right',W:'up',S:'down'};
+  if(map[e.key]&&document.getElementById('game-screen').classList.contains('active')){
+    e.preventDefault();
+    playerMove(map[e.key]);
+  }
+});
+
+/* ===== TOUCH SWIPE ===== */
+let touchX=null,touchY=null;
+const gameScreen=document.getElementById('game-screen');
+gameScreen.addEventListener('touchstart',e=>{touchX=e.touches[0].clientX;touchY=e.touches[0].clientY;},{passive:true});
+gameScreen.addEventListener('touchend',e=>{
+  if(touchX===null) return;
+  const dx=e.changedTouches[0].clientX-touchX;
+  const dy=e.changedTouches[0].clientY-touchY;
+  touchX=null;touchY=null;
+  if(Math.max(Math.abs(dx),Math.abs(dy))<30) return; // a tap, not a swipe
+  if(Math.abs(dx)>Math.abs(dy)){playerMove(dx>0?'right':'left');}
+  else{playerMove(dy>0?'down':'up');}
+});
+</script>
+</body>
+</html>

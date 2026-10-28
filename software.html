@@ -91,6 +91,22 @@
   .proj .stack { margin-top: .9rem; display: flex; flex-wrap: wrap; gap: .35rem; }
   .proj .stack span { font-size: .68rem; letter-spacing: .12em; text-transform: uppercase; border: 1px solid var(--line); padding: .2rem .5rem; color: var(--dim); }
   .proj .links { margin-top: .9rem; font-weight: 700; font-size: .9rem; display: flex; gap: 1.2rem; }
+  button.proj { font: inherit; color: inherit; text-align: left; cursor: pointer; padding: 0; transition: border-color .2s, box-shadow .2s; }
+  button.proj:hover, button.proj:focus-visible { border-color: var(--acc); box-shadow: 0 0 30px rgba(139,92,246,.2); outline: none; }
+  button.proj .links span { color: var(--acc2); }
+  dialog#case { width: min(1100px, 94vw); max-height: 90vh; margin: auto; background: var(--bg2); color: var(--ink); border: 1px solid var(--acc); padding: 2rem 1.6rem; overflow-y: auto; }
+  dialog#case::backdrop { background: rgba(4,4,8,.85); }
+  dialog#case .x { position: sticky; top: 0; float: right; background: var(--bg3); color: var(--ink); border: 1px solid var(--line); width: 2.4rem; height: 2.4rem; cursor: pointer; font-size: 1rem; }
+  dialog#case h3 { font-size: 1.5rem; margin: .3rem 0 1rem; }
+  dialog#case h4 { font-size: .85rem; letter-spacing: .22em; text-transform: uppercase; margin: 1.6rem 0 .4rem; color: var(--acc2); }
+  dialog#case h4.bad { color: #ff6b6b; } dialog#case h4.good { color: #4ade80; }
+  dialog#case .type { color: var(--acc2); font-size: .72rem; letter-spacing: .22em; text-transform: uppercase; }
+  dialog#case .cap { color: var(--dim); margin-bottom: .8rem; max-width: 70ch; }
+  dialog#case .shots { display: grid; grid-template-columns: 1fr 1fr; gap: .8rem; }
+  dialog#case .shots img { width: 100%; border: 1px solid var(--line); display: block; }
+  dialog#case .phone { display: flex; gap: 1rem; flex-wrap: wrap; margin: .4rem 0 1.6rem; }
+  dialog#case .phone video, dialog#case .phone img { width: 260px; max-width: 100%; border: 1px solid var(--line); border-radius: 18px; display: block; background: #000; }
+  @media (max-width: 700px) { dialog#case { padding: 1.2rem 1rem; } dialog#case .shots { grid-template-columns: 1fr; } dialog#case .phone video, dialog#case .phone img { width: calc(50% - .5rem); } }
   .quotes { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; }
   .quote { border: 1px solid var(--line); background: var(--bg2); padding: 1.4rem; }
   .quote .stars { color: var(--warm); letter-spacing: .15em; }
@@ -110,7 +126,8 @@
   <nav>
     <a class="opt" href="#services">Services</a>
     <a class="opt" href="#pricing">Pricing</a>
-    <a class="opt" href="#work">Work</a>
+    <a class="opt" href="#websites">Websites</a>
+    <a class="opt" href="#projects">Projects</a>
     <a href="#contact">Contact</a>
     <a class="opt" href="index.html">Artist Site</a>
   </nav>
@@ -122,7 +139,7 @@
   <p>I build fast, phone-first websites for Corona and Inland Empire businesses: your hours, your prices, tap-to-call, directions and online booking, set up so Google shows the right info. I also build custom tools and automations when an off-the-shelf app doesn't fit.</p>
   <div class="cta">
     <a class="btn" href="#contact">Get a free mockup</a>
-    <a class="btn ghost" href="#work">See my work</a>
+    <a class="btn ghost" href="#websites">See my work</a>
   </div>
   <div class="facts"><span>6 years as a software engineer</span><span>Based in Corona</span><span>You own your site</span><span>No ads, no lock-in</span></div>
 </header>
@@ -176,29 +193,38 @@
   </div>
 </section>
 
-<section id="work">
-  <div class="kicker">Recent work</div>
+<section id="websites">
+  <div class="kicker">Client work</div>
+  <h2>Websites</h2>
+  <p class="lead">Tap a project to see the before and after.</p>
+  <div class="work">
+    <button class="proj open" data-case="joes">
+      <img src="assets/software/joes.jpg" alt="Concept website for Joe's Barber Shop in Corona" loading="lazy">
+      <div class="body"><div class="type">Redesign concept</div><h3>Joe's Barber Shop</h3>
+        <p>An ad-covered free page turned into a real site for a Corona barbershop: live open/closed hours, tap-to-call, directions, services, barber profiles and online booking.</p>
+        <div class="stack"><span>HTML/CSS</span><span>JavaScript</span><span>Square Appointments</span></div>
+        <div class="links"><span>See before &amp; after →</span></div></div>
+    </button>
+    <button class="proj open" data-case="site">
+      <img src="assets/software/events.jpg" alt="DJ Sidmastaflex private events booking page" loading="lazy">
+      <div class="body"><div class="type">Live site</div><h3>sidmastaflex.com</h3>
+        <p>My own artist site and event-DJ booking business: packages, a quote request form, photo and video galleries, an auto-updating events list and search-friendly business info.</p>
+        <div class="stack"><span>HTML/CSS</span><span>JavaScript</span><span>GitHub Pages</span><span>Python</span></div>
+        <div class="links"><span>See the build →</span></div></div>
+    </button>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="kicker">Side projects</div>
   <h2>Projects</h2>
   <div class="work">
     <div class="proj">
-      <img src="assets/software/joes.jpg" alt="Concept website for Joe's Barber Shop in Corona" loading="lazy">
-      <div class="body"><div class="type">Website concept</div><h3>Joe's Barber Shop</h3>
-        <p>A redesign concept for a Corona barbershop that's been around since the '60s: live open/closed hours, tap-to-call, directions, services, barber profiles and an online booking flow.</p>
-        <div class="stack"><span>HTML/CSS</span><span>JavaScript</span><span>Square Appointments</span></div>
-        <div class="links"><a href="demo/joes/" target="_blank" rel="noopener">View concept →</a></div></div>
-    </div>
-    <div class="proj">
-      <img src="assets/software/events.jpg" alt="DJ Sidmastaflex private events booking page" loading="lazy">
-      <div class="body"><div class="type">Website</div><h3>sidmastaflex.com</h3>
-        <p>My own artist site and event-DJ booking page: packages, a quote request form, photo and video galleries, an auto-updating events list and search-friendly business info.</p>
-        <div class="stack"><span>HTML/CSS</span><span>JavaScript</span><span>GitHub Pages</span><span>Python</span></div>
-        <div class="links"><a href="events.html">View site →</a></div></div>
-    </div>
-    <div class="proj">
-      <div class="art" style="background:#080808;color:#a0ff80;font-family:monospace">GRID<span style="color:#ff4040">WAR</span></div>
+      <a href="projects/grid-war/" target="_blank" rel="noopener"><img src="assets/software/gridwar.jpg" alt="Grid War gameplay" loading="lazy"></a>
       <div class="body"><div class="type">Browser game</div><h3>Grid War</h3>
-        <p>A battle-royale twist on 2048: you against six computer opponents of different skill levels, sending attacks Tetris 99-style, with win-streak crowns, synthesized sound packs, swappable visual themes and an in-game shop.</p>
-        <div class="stack"><span>JavaScript</span><span>Web Audio API</span><span>Canvas</span></div></div>
+        <p>A battle-royale twist on 2048: you against six computer opponents of different skill levels, sending junk tiles at whoever you target, with win-streak crowns, synthesized sound packs, swappable themes and a demo shop.</p>
+        <div class="stack"><span>JavaScript</span><span>Web Audio API</span><span>Canvas</span></div>
+        <div class="links"><a href="projects/grid-war/" target="_blank" rel="noopener">Play it ↗</a></div></div>
     </div>
     <div class="proj">
       <div class="art" style="background:linear-gradient(135deg,#0e1a16,#14141c);color:#1D9E75">IDEA&nbsp;✓</div>
@@ -214,6 +240,30 @@
     </div>
   </div>
 </section>
+
+<dialog id="case">
+  <button class="x" aria-label="Close">✕</button>
+  <div id="casebody"></div>
+</dialog>
+<template id="case-joes">
+  <div class="type">Redesign concept</div><h3>Joe's Barber Shop</h3>
+  <h4 class="bad">Before</h4>
+  <p class="cap">The old free page: other companies' ads on every side, a stock photo, no services or prices, and a pop-up car-lease ad.</p>
+  <div class="shots"><img src="assets/software/joes/before-desktop-1.jpg" alt="Old Joe's Barber Shop page covered in ads" loading="lazy"><img src="assets/software/joes/before-desktop-2.jpg" alt="Old page with Medicare and car-lease ads" loading="lazy"></div>
+  <h4 class="good">After</h4>
+  <p class="cap">No ads. The shop's name, hours with a live open/closed badge, one-tap calling, directions, services and online booking.</p>
+  <div class="shots"><img src="assets/software/joes/after-desktop-1.jpg" alt="New Joe's Barber Shop homepage" loading="lazy"><img src="assets/software/joes/after-desktop-2.jpg" alt="New online booking section" loading="lazy"></div>
+  <h4>On a phone</h4>
+  <div class="phone"><video src="assets/software/joes/walkthrough.mp4" poster="assets/software/joes/walkthrough-poster.jpg" controls muted playsinline loop preload="none"></video><img src="assets/software/joes/after-mobile.jpg" alt="New site on a phone" loading="lazy"></div>
+  <a class="btn" href="demo/joes/" target="_blank" rel="noopener">Open the concept site ↗</a>
+</template>
+<template id="case-site">
+  <div class="type">Live site</div><h3>sidmastaflex.com</h3>
+  <p class="cap">Built from scratch: an artist site with music, galleries and a press kit, plus a separate booking page for private events with packages and a quote form.</p>
+  <div class="shots"><img src="assets/software/site/artist-desktop.jpg" alt="Sidmastaflex artist site" loading="lazy"><img src="assets/software/site/events-desktop.jpg" alt="Private events booking page" loading="lazy"></div>
+  <div class="phone"><img src="assets/software/site/events-mobile.jpg" alt="Events page on a phone" loading="lazy"></div>
+  <a class="btn" href="events.html" target="_blank" rel="noopener">Visit the live site ↗</a>
+</template>
 
 <!-- Testimonials: unhide once the first approved testimonial is in. Copy a .quote block per testimonial. -->
 <section id="testimonials" hidden>
@@ -243,5 +293,19 @@
   <a href="events.html">Book a DJ →</a> &nbsp; <a href="index.html">Artist site →</a>
 </footer>
 <script>document.getElementById("yr").textContent = new Date().getFullYear();</script>
+<script>
+(function () {
+  var d = document.getElementById("case"), body = document.getElementById("casebody");
+  document.querySelectorAll("[data-case]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      body.innerHTML = ""; body.appendChild(document.getElementById("case-" + b.dataset.case).content.cloneNode(true));
+      d.showModal(); d.scrollTop = 0;
+    });
+  });
+  d.querySelector(".x").addEventListener("click", function () { d.close(); });
+  d.addEventListener("click", function (e) { if (e.target === d) d.close(); });
+  d.addEventListener("close", function () { body.innerHTML = ""; });
+})();
+</script>
 </body>
 </html>

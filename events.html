@@ -300,10 +300,12 @@
   <div class="gal">
     <img src="assets/photos/mehndi-mc.jpg" alt="Sidmastaflex MCing a Mehndi celebration" loading="lazy">
     <div class="tall"><video src="assets/video/Sidmastaflex_LitCrowd.mp4" muted loop playsinline autoplay preload="metadata"></video></div>
+    <img src="assets/photos/setup-halloween-decks.jpg" alt="DJ Sidmastaflex at the decks with Yamaha speakers, sub and LED infinity cube" loading="lazy">
     <img src="assets/photos/mehndi-laptop.jpg" alt="Sidmastaflex DJing a Mehndi at a restaurant venue" loading="lazy">
     <img src="assets/photos/mehndi-bw.jpg" alt="Sidmastaflex at the decks, black and white" loading="lazy">
     <img src="assets/photos/2-yrr-2-kool-fest-2024_sidmastaflex_cookin3.jpg" alt="Sidmastaflex DJing with lights" loading="lazy">
     <img src="assets/photos/2-yrr-2-kool-fest-2024_sidmastaflex_lockedin.jpg" alt="Sidmastaflex mixing live" loading="lazy">
+    <img src="assets/photos/setup-halloween-wide.jpg" alt="Full DJ setup: two Yamaha tops, 18-inch sub, CDJs and LED infinity cube" loading="lazy">
     <img src="assets/photos/3-team-discotheque_img_20250419_022027_161.jpg" alt="Sidmastaflex DJing in front of his logo" loading="lazy">
   </div>
 </section>
@@ -395,6 +397,19 @@
 
 <script>
 document.getElementById("yr").textContent = new Date().getFullYear();
+/* format phone as (951) 555-0123 while typing */
+(function () {
+  var p = document.getElementById("f-phone");
+  p.addEventListener("input", function () {
+    var d = p.value.replace(/\D/g, "");
+    if (d.length === 11 && d[0] === "1") d = d.slice(1);
+    d = d.slice(0, 10);
+    var out = d.length > 6 ? "(" + d.slice(0,3) + ") " + d.slice(3,6) + "-" + d.slice(6)
+            : d.length > 3 ? "(" + d.slice(0,3) + ") " + d.slice(3)
+            : d.length ? "(" + d : "";
+    p.value = out;
+  });
+})();
 /* "Other" event type reveals a text field */
 (function () {
   var t = document.getElementById("f-type"), o = document.getElementById("f-type-other");
