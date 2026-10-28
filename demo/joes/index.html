@@ -67,6 +67,22 @@
   .svc p { color: var(--dim); font-size: .94rem; }
   .note { margin-top: 14px; font-size: .9rem; color: var(--dim); }
 
+  /* booking widget (demo of Square Appointments flow) */
+  .booking { background: var(--cream); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .bk { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 22px; box-shadow: 0 10px 30px rgba(29,26,23,.06); }
+  .bk h3 { font-size: .8rem; letter-spacing: .16em; text-transform: uppercase; color: var(--dim); margin: 18px 0 8px; }
+  .bk h3:first-child { margin-top: 0; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip { border: 1.5px solid var(--line); background: var(--paper); border-radius: 99px; padding: 8px 14px; font: 600 .92rem Inter, sans-serif; cursor: pointer; color: var(--ink); }
+  .chip:hover { border-color: var(--ink); }
+  .chip.on { background: var(--ink); color: var(--cream); border-color: var(--ink); }
+  .bk-foot { display: flex; justify-content: space-between; align-items: center; gap: 14px; flex-wrap: wrap; margin-top: 22px; padding-top: 16px; border-top: 1px solid var(--line); }
+  .bk-sum { color: var(--dim); font-size: .95rem; }
+  .bk-sum b { color: var(--ink); }
+  .bk button.btn { border: 0; cursor: pointer; font-family: inherit; }
+  .bk button.btn:disabled { opacity: .45; cursor: not-allowed; }
+  .powered { font-size: .82rem; color: var(--dim); margin-top: 10px; }
+  .toast { display: none; margin-top: 14px; background: #eaf5ec; border: 1px solid #b8dcbf; color: #1f6b33; padding: 12px 14px; border-radius: 6px; font-weight: 600; }
   /* barbers (placeholder cards until real photos arrive) */
   .team { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 16px; }
   .barber { background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 22px; text-align: center; }
@@ -105,8 +121,8 @@
 <div class="bar">
   <div class="wrap">
     <a class="brand" href="#top">Joe's Barber Shop</a>
-    <nav><a href="#services">Services</a><a href="#barbers">Barbers</a><a href="#about">About</a><a href="#visit">Visit</a></nav>
-    <a class="callbtn" href="tel:+19517372357">Call<span class="long"> (951) 737-2357</span></a>
+    <nav><a href="#services">Services</a><a href="#book">Book</a><a href="#barbers">Barbers</a><a href="#about">About</a><a href="#visit">Visit</a></nav>
+    <div style="display:flex;gap:8px"><a class="callbtn" href="#book" style="background:transparent;border:2px solid var(--cream);padding:7px 12px">Book</a><a class="callbtn" href="tel:+19517372357">Call<span class="long"> (951) 737-2357</span></a></div>
   </div>
 </div>
 <div class="pole" aria-hidden="true"></div>
@@ -118,8 +134,8 @@
       <h1>Clean cuts.<br>Fair prices.<br>Since the '60s.</h1>
       <p>Corona's neighborhood barber for nearly 60 years. Classic cuts and fades from barbers who've seen it all.</p>
       <div class="actions">
-        <a class="btn primary" href="tel:+19517372357">Call to check the wait</a>
-        <a class="btn secondary" href="https://www.google.com/maps/dir/?api=1&destination=1009+W+6th+St+Corona+CA+92882" target="_blank" rel="noopener">Get directions</a>
+        <a class="btn primary" href="#book">Book online</a>
+        <a class="btn secondary" href="tel:+19517372357">Call (951) 737-2357</a>
       </div>
     </div>
     <div class="card" aria-live="polite">
@@ -149,6 +165,29 @@
       <div class="svc"><h3>Beard trim <span>$__</span></h3><p>Shape-up and line-up.</p></div>
     </div>
     <p class="note">Sample menu: services and prices to be filled in by the shop. Questions? Call (951) 737-2357.</p>
+  </div>
+</section>
+
+<section class="booking" id="book">
+  <div class="wrap">
+    <h2>Book online</h2>
+    <p class="lead">Pick a service, a barber and a time. No phone call needed.</p>
+    <div class="bk">
+      <h3>Service</h3>
+      <div class="chips" data-k="service"><button class="chip">Men's haircut</button><button class="chip">Skin fade</button><button class="chip">Kids' cut</button><button class="chip">Beard trim</button></div>
+      <h3>Barber</h3>
+      <div class="chips" data-k="barber"><button class="chip">Any barber</button><button class="chip">Barber 1</button><button class="chip">Barber 2</button><button class="chip">Barber 3</button></div>
+      <h3>Day</h3>
+      <div class="chips" data-k="day" id="days"></div>
+      <h3>Time</h3>
+      <div class="chips" data-k="time" id="times"></div>
+      <div class="bk-foot">
+        <div class="bk-sum" id="bksum">Choose a service, barber, day and time.</div>
+        <button class="btn primary" id="bkgo" disabled>Request appointment</button>
+      </div>
+      <div class="toast" id="bktoast">Demo only: on the live site this books straight into the shop's Square Appointments calendar and texts the customer a confirmation.</div>
+      <div class="powered">Online booking powered by Square Appointments · walk-ins still welcome to call</div>
+    </div>
   </div>
 </section>
 
@@ -201,6 +240,40 @@
 
 <script>
 document.getElementById("yr").textContent = new Date().getFullYear();
+/* booking demo */
+(function () {
+  const open = { 2: [8, 17], 3: [8, 17], 4: [8, 17], 5: [8, 17], 6: [8, 15] };
+  const names = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+  const days = document.getElementById("days"), times = document.getElementById("times");
+  const now = new Date(new Date().toLocaleString("en-US", { timeZone: "America/Los_Angeles" }));
+  let added = 0;
+  for (let i = 0; added < 5 && i < 14; i++) {
+    const d = new Date(now); d.setDate(now.getDate() + i);
+    if (!open[d.getDay()] || (i === 0 && now.getHours() >= open[d.getDay()][1] - 1)) continue;
+    const b = document.createElement("button"); b.className = "chip"; b.dataset.dow = d.getDay();
+    b.textContent = (i === 0 ? "Today" : i === 1 ? "Tomorrow" : names[d.getDay()]) + " " + (d.getMonth() + 1) + "/" + d.getDate();
+    days.appendChild(b); added++;
+  }
+  const sel = {};
+  function fillTimes(dow) {
+    times.innerHTML = ""; const [o, c] = open[dow];
+    for (let h = o; h < c; h++) for (const m of [0, 30]) {
+      if ((h * 7 + m) % 3 === 0) continue; // a few slots already taken
+      const b = document.createElement("button"); b.className = "chip";
+      b.textContent = ((h + 11) % 12 + 1) + ":" + (m ? "30" : "00") + (h < 12 ? " am" : " pm"); times.appendChild(b);
+    }
+  }
+  document.querySelectorAll(".bk .chips").forEach(g => g.addEventListener("click", e => {
+    const b = e.target.closest(".chip"); if (!b) return;
+    g.querySelectorAll(".chip").forEach(x => x.classList.remove("on")); b.classList.add("on");
+    sel[g.dataset.k] = b.textContent;
+    if (g.dataset.k === "day") { fillTimes(+b.dataset.dow); delete sel.time; }
+    const ok = sel.service && sel.barber && sel.day && sel.time;
+    document.getElementById("bkgo").disabled = !ok;
+    document.getElementById("bksum").innerHTML = ok ? "<b>" + sel.service + "</b> with <b>" + sel.barber + "</b>, <b>" + sel.day + "</b> at <b>" + sel.time + "</b>" : "Choose a service, barber, day and time.";
+  }));
+  document.getElementById("bkgo").addEventListener("click", () => { document.getElementById("bktoast").style.display = "block"; });
+})();
 /* live open/closed status in Corona's time zone */
 (function () {
   const hrs = { 2: [8, 17], 3: [8, 17], 4: [8, 17], 5: [8, 17], 6: [8, 15] };
