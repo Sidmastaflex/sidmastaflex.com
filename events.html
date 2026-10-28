@@ -158,6 +158,13 @@
   }
   input:focus, select:focus, textarea:focus { outline: none; border-color: var(--acc); box-shadow: 0 0 0 2px rgba(139,92,246,.25); }
   textarea { min-height: 110px; resize: vertical; }
+  .lbl { display: block; font-size: .72rem; letter-spacing: .18em; text-transform: uppercase; color: var(--dim); margin-bottom: .35rem; }
+  .pkgopts { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: .6rem; }
+  .pkgopt { display: flex; gap: .6rem; align-items: flex-start; border: 1px solid var(--line); background: var(--bg3); padding: .75rem .8rem; cursor: pointer; margin: 0; text-transform: none; letter-spacing: 0; color: var(--ink); font-size: .95rem; }
+  .pkgopt input { width: auto; margin-top: .25rem; accent-color: var(--acc); }
+  .pkgopt b { display: block; font-weight: 700; }
+  .pkgopt small { display: block; color: var(--dim); font-size: .82rem; margin-top: .15rem; line-height: 1.35; }
+  .pkgopt:has(input:checked) { border-color: var(--acc); box-shadow: 0 0 0 2px rgba(139,92,246,.25); }
   .form-actions { display: flex; gap: .9rem; flex-wrap: wrap; align-items: center; }
   .form-note { color: var(--dim); font-size: .85rem; }
   @media (max-width: 640px) { form { grid-template-columns: 1fr; padding: 1.2rem; } }
@@ -187,7 +194,7 @@
     <h1>Your party.<br>Packed dance floor.</h1>
     <p>Weddings, Mehndis, quinceañeras, birthdays, house parties, corporate events, and more. I read the room, take requests and bring the sound, lights and visuals, so all you have to do is show up.</p>
     <div class="cta">
-      <a class="btn" href="#book">Check My Date</a>
+      <a class="btn" href="#book">Get a Quote</a>
       <a class="btn ghost" href="sms:+19513182818">Text (951) 318-2818</a>
     </div>
     <div class="facts">
@@ -324,8 +331,8 @@
 
 <section id="book">
   <div class="kicker">Book</div>
-  <h2>Check my date</h2>
-  <p class="lead">Tell me about your event and I'll reply with availability and a quote, usually within a few hours.</p>
+  <h2>Get a quote</h2>
+  <p class="lead">Tell me about your event and I'll confirm I'm free and send a quote, usually within a few hours.</p>
   <form id="bookform" novalidate>
     <div><label for="f-name">Your name</label><input id="f-name" name="name" required autocomplete="name"></div>
     <div><label for="f-phone">Phone</label><input id="f-phone" name="phone" type="tel" autocomplete="tel"></div>
@@ -334,17 +341,21 @@
     <div>
       <label for="f-type">Event type</label>
       <select id="f-type" name="type">
-        <option>Birthday</option><option>House party</option><option>Wedding</option><option>Mehndi / Sangeet</option>
-        <option>Quinceañera</option><option>Corporate</option><option>Halloween</option><option>Themed event</option><option>Celebration of life</option><option>Bar / bat mitzvah</option><option>Farmers market</option><option>Rave / renegade</option><option>School event</option>
-        <option>Equipment rental</option><option>Other</option>
+        <option>Wedding</option><option>Mehndi, Sangeet or cultural celebration</option><option>Quinceañera</option>
+        <option>Birthday or house party</option><option>Corporate event</option><option>Equipment rental</option><option value="Other">Other (tell me)</option>
       </select>
+      <input id="f-type-other" name="type_other" placeholder="What kind of event?" style="display:none;margin-top:.5rem">
     </div>
-    <div>
-      <label for="f-pkg">Package</label>
-      <select id="f-pkg" name="package">
-        <option>Not sure yet</option><option>The Party</option><option>The Event</option><option>The Celebration</option>
-        <option>DJ only (venue has sound)</option><option>Equipment rental</option>
-      </select>
+    <div class="full">
+      <span class="lbl">Package</span>
+      <div class="pkgopts" role="radiogroup" aria-label="Package">
+        <label class="pkgopt"><input type="radio" name="package" value="Not sure yet" checked><span><b>Not sure yet</b><small>I'll recommend a package</small></span></label>
+        <label class="pkgopt"><input type="radio" name="package" value="The Party"><span><b>The Party · $450</b><small>3 hrs · sound + sub, wireless mic, requests</small></span></label>
+        <label class="pkgopt"><input type="radio" name="package" value="The Event"><span><b>The Event · $750</b><small>4 hrs · adds lighting, projector visuals, light MC</small></span></label>
+        <label class="pkgopt"><input type="radio" name="package" value="The Celebration"><span><b>The Celebration · from $1,000</b><small>Full night · adds full MC, custom edit, planning call</small></span></label>
+        <label class="pkgopt"><input type="radio" name="package" value="DJ only (venue has sound)"><span><b>DJ only</b><small>Venue already has sound · ask for rate</small></span></label>
+        <label class="pkgopt"><input type="radio" name="package" value="Equipment rental"><span><b>Equipment rental</b><small>Gear only, no DJ</small></span></label>
+      </div>
     </div>
     <div><label for="f-city">City / venue</label><input id="f-city" name="city" placeholder="e.g. Riverside, backyard"></div>
     <div><label for="f-guests">Guests &amp; hours</label><input id="f-guests" name="guests" placeholder="e.g. 80 guests, 7–11pm"></div>
@@ -368,13 +379,17 @@
 
 <script>
 document.getElementById("yr").textContent = new Date().getFullYear();
+/* "Other" event type reveals a text field */
+(function () {
+  var t = document.getElementById("f-type"), o = document.getElementById("f-type-other");
+  t.addEventListener("change", function () { o.style.display = t.value === "Other" ? "block" : "none"; if (t.value === "Other") o.focus(); });
+})();
 
 /* package buttons preselect the form */
 document.querySelectorAll("[data-pkg]").forEach(function (a) {
   a.addEventListener("click", function () {
-    var sel = document.getElementById("f-pkg");
     var v = a.getAttribute("data-pkg");
-    for (var i = 0; i < sel.options.length; i++) if (sel.options[i].text === v) sel.selectedIndex = i;
+    var r = document.querySelector('input[name="package"][value="' + v + '"]'); if (r) r.checked = true;
     if (v === "Equipment rental") document.getElementById("f-type").value = "Equipment rental";
   });
 });
@@ -393,14 +408,14 @@ document.getElementById("bookform").addEventListener("submit", function (e) {
     "Phone: " + f.phone.value,
     "Email: " + f.email.value,
     "Event date: " + f.date.value,
-    "Event type: " + f.type.value,
-    "Package: " + f.package.value,
+    "Event type: " + (f.type.value === "Other" ? (f.type_other.value || "Other") : f.type.value),
+    "Package: " + ((document.querySelector('input[name="package"]:checked') || {}).value || ""),
     "City / venue: " + f.city.value,
     "Guests & hours: " + f.guests.value,
     "",
     f.notes.value
   ];
-  var subject = "Booking request: " + f.type.value + (f.date.value ? " on " + f.date.value : "");
+  var subject = "Quote request: " + (f.type.value === "Other" ? (f.type_other.value || "event") : f.type.value) + (f.date.value ? " on " + f.date.value : "");
   window.location.href = "mailto:booking@sidmastaflex.com?subject=" + encodeURIComponent(subject) +
     "&body=" + encodeURIComponent(lines.join("\n"));
   note.textContent = "Your email app should open now. If it doesn't, text (951) 318-2818.";
