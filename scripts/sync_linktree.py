@@ -13,7 +13,9 @@ UA = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.3
 EVENT_DOMAINS = (
     "posh.vip", "eventbrite.", "partiful.com", "ticketfairy.com", "dice.fm",
     "ra.co", "residentadvisor.", "shotgun.live", "tixr.com", "seetickets.",
-    "ticketweb.", "universe.com", "withfriends.co", "eventvesta.com", "tickettailor.com",
+    "ticketweb.", "universe.com", "withfriends.co", "eventsta.com", "eventvesta.com",
+    "tickettailor.com", "lu.ma", "ticketleap.", "ticketspice.", "eventeny.com", "allevents.in",
+    "pear.us", "ticketmaster.", "axs.com", "etix.com", "showclix.com", "holdmyticket.com",
 )
 
 def fetch(url):
